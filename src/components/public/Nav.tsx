@@ -22,12 +22,13 @@ export default function Nav({ brand }: { brand: Content["brand"] }) {
 
   const other: "en" | "tr" = lang === "en" ? "tr" : "en";
 
+  const headerClass = [
+    "fixed inset-x-0 top-0 z-50 bg-white/85 backdrop-blur-md transition-shadow duration-300",
+    scrolled ? "shadow-soft" : "",
+  ].join(" ");
+
   return (
-    <header
-      className={`fixed inset-x-0 top-0 z-50 bg-white/85 backdrop-blur-md transition-shadow duration-300 ${
-        scrolled ? "shadow-soft" : ""
-      }`}
-    >
+    <header className={headerClass}>
       <nav className="container-page flex h-[68px] items-center justify-between gap-4">
         <a href="#home" className="flex items-center gap-2.5" aria-label="BALLOONS home">
           {brand.logoUrl ? (
@@ -47,7 +48,7 @@ export default function Nav({ brand }: { brand: Content["brand"] }) {
           {LINKS.map((key) => (
             <li key={key}>
               
-                href={`#${key}`}
+                href={"#" + key}
                 className="text-sm font-medium text-navy/70 transition-colors hover:text-navy"
               >
                 {t(NAV_LABELS[key])}
@@ -87,7 +88,7 @@ export default function Nav({ brand }: { brand: Content["brand"] }) {
             {LINKS.map((key) => (
               <li key={key}>
                 
-                  href={`#${key}`}
+                  href={"#" + key}
                   onClick={() => setOpen(false)}
                   className="block rounded-lg px-2 py-2.5 text-base font-medium text-navy/80 hover:bg-paper"
                 >
