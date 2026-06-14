@@ -14,6 +14,8 @@ export default function About({ about }: { about: Content["about"] }) {
         <Reveal>
           <p className="eyebrow">{t(NAV_LABELS.about)}</p>
           <h2 className="h-section mt-3 max-w-3xl">{t(about.heading)}</h2>
+        </Reveal>
+        <Reveal delay={120}>
           <p className="mt-6 max-w-3xl text-lg leading-relaxed text-ink/70">{t(about.body)}</p>
         </Reveal>
 

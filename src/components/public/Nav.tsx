@@ -65,7 +65,7 @@ export default function Nav({ brand }: { brand: Content["brand"] }) {
           >
             {other}
           </button>
-          <a href="#sponsors" className="btn-primary hidden px-5 py-2.5 sm:inline-flex">
+          <a href="#partner" className="btn-primary hidden px-5 py-2.5 sm:inline-flex">
             {t({ en: "Become a sponsor", tr: "Sponsor olun" })}
           </a>
           <button
@@ -97,7 +97,7 @@ export default function Nav({ brand }: { brand: Content["brand"] }) {
               </li>
             ))}
           </ul>
-          <a href="#sponsors" onClick={() => setOpen(false)} className="btn-primary mt-3 w-full">
+          <a href="#partner" onClick={() => setOpen(false)} className="btn-primary mt-3 w-full">
             {t({ en: "Become a sponsor", tr: "Sponsor olun" })}
           </a>
         </div>
