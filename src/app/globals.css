@@ -1,0 +1,87 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* offset anchored sections for the sticky header */
+  scroll-padding-top: 84px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  @apply bg-white text-ink font-sans antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: #e5283c;
+  color: #fff;
+}
+
+/* Visible keyboard focus everywhere */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid #e5283c;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-content px-6 sm:px-8;
+  }
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-scarlet;
+  }
+  .h-section {
+    @apply font-display text-3xl font-bold tracking-tight text-navy sm:text-4xl md:text-[2.75rem] md:leading-[1.1];
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-all duration-200 focus-visible:outline-2;
+  }
+  .btn-primary {
+    @apply btn bg-scarlet text-white hover:bg-scarlet-600 hover:shadow-lift active:translate-y-px;
+  }
+  .btn-secondary {
+    @apply btn border border-navy/15 bg-white text-navy hover:border-navy/40 hover:shadow-soft;
+  }
+  .btn-ghost {
+    @apply btn bg-white/10 text-white hover:bg-white/20;
+  }
+}
+
+/* Scroll-reveal: hidden until .is-visible is added by IntersectionObserver */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .animate-breathe,
+  .animate-floatUp {
+    animation: none !important;
+  }
+}

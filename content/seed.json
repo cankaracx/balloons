@@ -1,0 +1,210 @@
+{
+  "content": {
+    "brand": {
+      "name": "BALLOONS",
+      "teamNumber": "",
+      "logoUrl": null
+    },
+    "hero": {
+      "eyebrow": {
+        "en": "Rookie 2026 · FIRST Robotics Competition · Antalya",
+        "tr": "Çaylak 2026 · FIRST Robotics Competition · Antalya"
+      },
+      "title": "BALLOONS",
+      "tagline": {
+        "en": "TED Antalya Koleji's rookie FRC team — building our future one mechanism, one idea, and one bold dream at a time.",
+        "tr": "TED Antalya Koleji'nin çaylak FRC takımı — geleceğimizi her seferinde bir mekanizma, bir fikir ve bir cesur hayalle inşa ediyoruz."
+      },
+      "ctaPrimary": { "en": "Become a sponsor", "tr": "Sponsor olun" },
+      "ctaSecondary": { "en": "Meet the team", "tr": "Takımı tanıyın" }
+    },
+    "about": {
+      "heading": { "en": "A rookie team with a veteran's ambition", "tr": "Bir veteranın hırsına sahip çaylak bir takım" },
+      "body": {
+        "en": "We are BALLOONS — a new FIRST Robotics Competition team founded by students at TED Antalya Koleji. Our name is a nod to our mascot, the pufferfish: small by nature, but capable of expanding far beyond its size when it matters. That is exactly how we approach engineering. We are at the very beginning, and we intend to build something prestigious from the ground up: a team known for clean mechanical design, sharp software, and relentless curiosity. Before we ever lifted a wrench together, our founders already placed 2nd locally at the NASA Space Apps Challenge. Now we are channelling that drive into competition robotics.",
+        "tr": "Biz BALLOONS'uz — TED Antalya Koleji öğrencileri tarafından kurulan yeni bir FIRST Robotics Competition takımı. İsmimiz maskotumuz balon balığına bir gönderme: doğası gereği küçük, ama gerektiğinde boyutunun çok ötesine genişleyebilen bir canlı. Mühendisliğe tam olarak böyle yaklaşıyoruz. Henüz en başındayız ve sıfırdan prestijli bir şey inşa etmeyi hedefliyoruz: temiz mekanik tasarımı, keskin yazılımı ve durmak bilmeyen merakıyla tanınan bir takım. Birlikte daha bir anahtar bile kaldırmadan, kurucularımız NASA Space Apps Challenge'da yerel 2.'liği elde etti. Şimdi o azmi yarışma robotiğine yönlendiriyoruz."
+      },
+      "stats": [
+        { "id": "s1", "label": { "en": "Founded", "tr": "Kuruluş" }, "value": { "en": "2026", "tr": "2026" } },
+        { "id": "s2", "label": { "en": "Status", "tr": "Statü" }, "value": { "en": "FRC Rookie", "tr": "FRC Çaylak" } },
+        { "id": "s3", "label": { "en": "Based in", "tr": "Konum" }, "value": { "en": "Antalya, Türkiye", "tr": "Antalya, Türkiye" } },
+        { "id": "s4", "label": { "en": "First milestone", "tr": "İlk başarı" }, "value": { "en": "2nd · NASA Space Apps", "tr": "2.'lik · NASA Space Apps" } }
+      ]
+    },
+    "sponsors": {
+      "heading": { "en": "Invest in the engineers of tomorrow", "tr": "Yarının mühendislerine yatırım yapın" },
+      "pitch": {
+        "en": "A sponsorship is not a donation to a robot. It is an investment in young engineers, problem-solvers, and future innovators — students learning to design, prototype, fail, and iterate under real competition pressure. Your support buys parts and tools, but it builds skills, confidence, and careers. As a founding sponsor of a rookie team, your brand grows with our story from day one.",
+        "tr": "Sponsorluk bir robota bağış değildir. Genç mühendislere, problem çözücülere ve geleceğin yenilikçilerine — gerçek yarışma baskısı altında tasarlamayı, prototip üretmeyi, başarısız olmayı ve yinelemeyi öğrenen öğrencilere — bir yatırımdır. Desteğiniz parça ve takım satın alır, ama beceri, özgüven ve kariyer inşa eder. Çaylak bir takımın kurucu sponsoru olarak markanız ilk günden itibaren hikâyemizle birlikte büyür."
+      },
+      "cta": { "en": "Talk to us about sponsorship", "tr": "Sponsorluk için bize ulaşın" },
+      "emptyState": {
+        "en": "Your logo could be here. Be one of the founding sponsors who back this team before its first match.",
+        "tr": "Logonuz burada olabilir. Bu takımı ilk maçından önce destekleyen kurucu sponsorlardan biri olun."
+      },
+      "tiers": [
+        {
+          "id": "t1",
+          "name": { "en": "Title Partner", "tr": "Ana Partner" },
+          "amount": { "en": "₺100,000+", "tr": "₺100.000+" },
+          "perks": {
+            "en": "Top billing on robot, kit & banner\nLogo on team apparel\nFeatured in all media & press\nFactory / lab visit with the team",
+            "tr": "Robot, kit ve pankartta en üst düzey yer\nTakım kıyafetlerinde logo\nTüm medya ve basında öne çıkma\nTakımla atölye / laboratuvar ziyareti"
+          },
+          "featured": true
+        },
+        {
+          "id": "t2",
+          "name": { "en": "Gold", "tr": "Altın" },
+          "amount": { "en": "₺50,000+", "tr": "₺50.000+" },
+          "perks": {
+            "en": "Large logo on robot & banner\nLogo on team apparel\nSocial media features",
+            "tr": "Robot ve pankartta büyük logo\nTakım kıyafetlerinde logo\nSosyal medyada paylaşımlar"
+          },
+          "featured": false
+        },
+        {
+          "id": "t3",
+          "name": { "en": "Silver", "tr": "Gümüş" },
+          "amount": { "en": "₺25,000+", "tr": "₺25.000+" },
+          "perks": {
+            "en": "Logo on banner\nLogo on website\nSocial media mention",
+            "tr": "Pankartta logo\nWeb sitesinde logo\nSosyal medyada anılma"
+          },
+          "featured": false
+        },
+        {
+          "id": "t4",
+          "name": { "en": "Bronze", "tr": "Bronz" },
+          "amount": { "en": "₺10,000+", "tr": "₺10.000+" },
+          "perks": {
+            "en": "Logo on website\nThank-you on social media",
+            "tr": "Web sitesinde logo\nSosyal medyada teşekkür"
+          },
+          "featured": false
+        },
+        {
+          "id": "t5",
+          "name": { "en": "In-Kind", "tr": "Ayni Destek" },
+          "amount": { "en": "Materials & mentorship", "tr": "Malzeme ve mentorluk" },
+          "perks": {
+            "en": "Donate tools, parts, machining, or expertise\nRecognised at your contribution's value",
+            "tr": "Takım, parça, işleme veya uzmanlık bağışlayın\nKatkınızın değerinde tanınma"
+          },
+          "featured": false
+        }
+      ]
+    },
+    "team": {
+      "heading": { "en": "The founding crew", "tr": "Kurucu ekip" },
+      "intro": {
+        "en": "A small, driven group of students wearing many hats — designers, programmers, machinists, and strategists all at once.",
+        "tr": "Aynı anda birçok rolü üstlenen küçük ve azimli bir öğrenci grubu — tasarımcılar, programcılar, üretimciler ve stratejistler."
+      },
+      "emptyState": {
+        "en": "We're assembling our founding crew. Member profiles are coming soon.",
+        "tr": "Kurucu ekibimizi oluşturuyoruz. Üye profilleri yakında burada olacak."
+      }
+    },
+    "gallery": {
+      "heading": { "en": "From the workshop", "tr": "Atölyeden" },
+      "intro": {
+        "en": "Prototypes, sketches, late nights, and small wins. This is where the robot — and the team — takes shape.",
+        "tr": "Prototipler, eskizler, geç saatler ve küçük zaferler. Robotun — ve takımın — şekillendiği yer burası."
+      },
+      "emptyState": {
+        "en": "Photos from our build season will appear here soon.",
+        "tr": "İnşa sezonumuzdan fotoğraflar yakında burada olacak."
+      }
+    },
+    "outreach": {
+      "heading": { "en": "Bigger than a robot", "tr": "Bir robottan daha büyük" },
+      "body": {
+        "en": "FIRST is about more than competition. As a rookie team we are committed to growing STEM where we live — sharing what we learn, mentoring younger students, and making robotics feel reachable for everyone in Antalya.",
+        "tr": "FIRST yarışmadan çok daha fazlasıdır. Çaylak bir takım olarak yaşadığımız yerde STEM'i büyütmeye kararlıyız — öğrendiklerimizi paylaşmak, daha genç öğrencilere mentorluk yapmak ve robotiği Antalya'daki herkes için ulaşılabilir kılmak."
+      },
+      "items": [
+        {
+          "id": "o1",
+          "title": { "en": "Mentoring younger students", "tr": "Genç öğrencilere mentorluk" },
+          "body": { "en": "Introducing primary and middle-school students to building and coding through hands-on workshops.", "tr": "İlkokul ve ortaokul öğrencilerini uygulamalı atölyelerle yapım ve kodlamayla tanıştırmak." }
+        },
+        {
+          "id": "o2",
+          "title": { "en": "Open knowledge", "tr": "Açık bilgi" },
+          "body": { "en": "Sharing our designs, code, and lessons openly so other rookie teams can start faster than we did.", "tr": "Tasarımlarımızı, kodumuzu ve derslerimizi açıkça paylaşarak diğer çaylak takımların bizden daha hızlı başlamasını sağlamak." }
+        },
+        {
+          "id": "o3",
+          "title": { "en": "Community events", "tr": "Topluluk etkinlikleri" },
+          "body": { "en": "Demonstrating robotics at school and city events to spark curiosity in the next generation.", "tr": "Okul ve şehir etkinliklerinde robotik gösterileri yaparak yeni neslin merakını uyandırmak." }
+        }
+      ]
+    },
+    "contact": {
+      "heading": { "en": "Let's build something together", "tr": "Birlikte bir şeyler inşa edelim" },
+      "body": {
+        "en": "Sponsors, mentors, students, and parents — we'd love to hear from you. Reach out and let's talk.",
+        "tr": "Sponsorlar, mentorlar, öğrenciler ve veliler — sizden haber almak isteriz. Bize ulaşın, konuşalım."
+      },
+      "email": "balloons@tedantalya.k12.tr",
+      "phone": "",
+      "location": { "en": "TED Antalya Koleji, Antalya, Türkiye", "tr": "TED Antalya Koleji, Antalya, Türkiye" },
+      "instagram": "",
+      "linkedin": ""
+    }
+  },
+  "members": [
+    {
+      "id": "m1",
+      "name": "Your Name",
+      "role": { "en": "Team Captain", "tr": "Takım Kaptanı" },
+      "bio": { "en": "Leads strategy and keeps the team moving. Edit this profile from the admin panel.", "tr": "Stratejiyi yönetir ve takımı ileri taşır. Bu profili yönetim panelinden düzenleyin." },
+      "photoUrl": null,
+      "sort": 0
+    },
+    {
+      "id": "m2",
+      "name": "Add a member",
+      "role": { "en": "Mechanical Lead", "tr": "Mekanik Sorumlusu" },
+      "bio": { "en": "Owns the drivetrain and mechanisms. Replace this placeholder with a real teammate.", "tr": "Tahrik sistemi ve mekanizmalardan sorumlu. Bu yer tutucuyu gerçek bir takım arkadaşıyla değiştirin." },
+      "photoUrl": null,
+      "sort": 1
+    },
+    {
+      "id": "m3",
+      "name": "Add a member",
+      "role": { "en": "Programming Lead", "tr": "Yazılım Sorumlusu" },
+      "bio": { "en": "Writes the robot code and vision pipeline. Edit, reorder, or delete from the dashboard.", "tr": "Robot kodunu ve görüntü işleme hattını yazar. Panelden düzenleyin, sıralayın veya silin." },
+      "photoUrl": null,
+      "sort": 2
+    }
+  ],
+  "sponsors": [],
+  "gallery": [
+    {
+      "id": "g1",
+      "url": "https://picsum.photos/seed/balloons-cad/900/700",
+      "caption": { "en": "First CAD concepts", "tr": "İlk CAD konseptleri" },
+      "sort": 0
+    },
+    {
+      "id": "g2",
+      "url": "https://picsum.photos/seed/balloons-build/900/700",
+      "caption": { "en": "Prototyping the drivetrain", "tr": "Tahrik sistemi prototipi" },
+      "sort": 1
+    },
+    {
+      "id": "g3",
+      "url": "https://picsum.photos/seed/balloons-team/900/700",
+      "caption": { "en": "Team brainstorm", "tr": "Takım beyin fırtınası" },
+      "sort": 2
+    },
+    {
+      "id": "g4",
+      "url": "https://picsum.photos/seed/balloons-wires/900/700",
+      "caption": { "en": "Wiring & electronics", "tr": "Kablolama ve elektronik" },
+      "sort": 3
+    }
+  ]
+}
