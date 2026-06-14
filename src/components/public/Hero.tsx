@@ -57,6 +57,26 @@ export default function Hero({ hero, brand }: { hero: Content["hero"]; brand: Co
           )}
         </div>
       </div>
+      
+        href="#about"
+        className="group absolute bottom-6 right-6 z-10 hidden items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/50 transition-colors hover:text-white/80 sm:flex"
+      >
+        <span>Scroll</span>
+        <svg
+          width="14"
+          height="14"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="animate-bounce"
+          aria-hidden
+        >
+          <path d="M12 5v14M19 12l-7 7-7-7" />
+        </svg>
+      </a>
     </section>
   );
 }
