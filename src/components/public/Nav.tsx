@@ -47,7 +47,7 @@ export default function Nav({ brand }: { brand: Content["brand"] }) {
         <ul className="hidden items-center gap-7 lg:flex">
           {LINKS.map((key) => (
             <li key={key}>
-              
+              <a
                 href={"#" + key}
                 className="text-sm font-medium text-navy/70 transition-colors hover:text-navy"
               >
@@ -61,7 +61,7 @@ export default function Nav({ brand }: { brand: Content["brand"] }) {
           <button
             onClick={() => setLang(other)}
             className="rounded-full border border-navy/15 px-3 py-1.5 text-xs font-semibold uppercase tracking-wide text-navy/80 transition-colors hover:border-navy/40 hover:text-navy"
-            aria-label={other === "tr" ? "Türkçe'ye geç" : "Switch to English"}
+            aria-label={other === "tr" ? "Switch to Turkish" : "Switch to English"}
           >
             {other}
           </button>
@@ -87,7 +87,7 @@ export default function Nav({ brand }: { brand: Content["brand"] }) {
           <ul className="flex flex-col gap-1">
             {LINKS.map((key) => (
               <li key={key}>
-                
+                <a
                   href={"#" + key}
                   onClick={() => setOpen(false)}
                   className="block rounded-lg px-2 py-2.5 text-base font-medium text-navy/80 hover:bg-paper"
