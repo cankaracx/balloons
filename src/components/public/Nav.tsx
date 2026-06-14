@@ -24,8 +24,8 @@ export default function Nav({ brand }: { brand: Content["brand"] }) {
 
   return (
     <header
-      className={`fixed inset-x-0 top-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/85 shadow-soft backdrop-blur-md" : "bg-white/0"
+      className={`fixed inset-x-0 top-0 z-50 bg-white/85 backdrop-blur-md transition-shadow duration-300 ${
+        scrolled ? "shadow-soft" : ""
       }`}
     >
       <nav className="container-page flex h-[68px] items-center justify-between gap-4">
@@ -46,7 +46,7 @@ export default function Nav({ brand }: { brand: Content["brand"] }) {
         <ul className="hidden items-center gap-7 lg:flex">
           {LINKS.map((key) => (
             <li key={key}>
-              <a
+              
                 href={`#${key}`}
                 className="text-sm font-medium text-navy/70 transition-colors hover:text-navy"
               >
@@ -86,7 +86,7 @@ export default function Nav({ brand }: { brand: Content["brand"] }) {
           <ul className="flex flex-col gap-1">
             {LINKS.map((key) => (
               <li key={key}>
-                <a
+                
                   href={`#${key}`}
                   onClick={() => setOpen(false)}
                   className="block rounded-lg px-2 py-2.5 text-base font-medium text-navy/80 hover:bg-paper"
