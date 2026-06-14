@@ -57,7 +57,7 @@ export default function Hero({ hero, brand }: { hero: Content["hero"]; brand: Co
           )}
         </div>
       </div>
-      
+      <a
         href="#about"
         className="group absolute bottom-6 right-6 z-10 hidden items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-white/50 transition-colors hover:text-white/80 sm:flex"
       >
