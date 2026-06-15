@@ -3,166 +3,127 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * A thin glowing vertical line fixed to the viewport that "draws" downward as
- * the user scrolls. The line weaves left<->right as each section boundary
- * approaches, and a glowing dot always rides the tip of the drawn portion.
- *
- * Implementation: one tall SVG sized to the document height. A vertical path
- * weaves horizontally using the offsets of each <section> as control points.
- * Scroll progress drives strokeDashoffset (the "draw") and the dot position.
+ * Self-contained scroll-progress line.
+ * A thin glowing line fixed to the left of the viewport that "draws" downward
+ * as you scroll the page, weaving left<->right, with a glowing dot at its tip.
+ * Depends on NOTHING else (no globals.css, no tailwind keyframes).
  */
 export default function ScrollLine() {
-  const wrapRef = useRef<HTMLDivElement>(null);
   const pathRef = useRef<SVGPathElement>(null);
+  const drawRef = useRef<SVGPathElement>(null);
   const dotRef = useRef<SVGGElement>(null);
 
-  const [d, setD] = useState("");
-  const [docH, setDocH] = useState(0);
-  const [pathLen, setPathLen] = useState(0);
-  const [enabled, setEnabled] = useState(true);
+  const [size, setSize] = useState({ w: 200, h: 800 });
+  const [enabled, setEnabled] = useState(false);
 
-  // Horizontal band the line lives in (px from left). It rests at REST and
-  // swings to NEAR_EDGE on alternating sides as sections approach.
-  const REST = 26;
-
-  // Build the weaving path from the positions of each <section>.
+  // enable only on wider screens + non-reduced-motion
   useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const narrow = window.matchMedia("(max-width: 767px)").matches;
-    if (reduce || narrow) {
-      setEnabled(false);
-      return;
-    }
-    setEnabled(true);
-
-    function build() {
-      const docHeight = document.documentElement.scrollHeight;
-      const sections = Array.from(document.querySelectorAll("main section")) as HTMLElement[];
-      if (sections.length === 0) return;
-
-      const swing = Math.min(Math.max(window.innerWidth * 0.06, 40), 90); // how far it weaves
-      const top = sections[0].offsetTop + 80;
-
-      // Control points: rest at each section's middle, swing at each boundary.
-      const pts: { x: number; y: number }[] = [{ x: REST, y: top }];
-      sections.forEach((sec, i) => {
-        const start = sec.offsetTop;
-        const mid = sec.offsetTop + sec.offsetHeight / 2;
-        const side = i % 2 === 0 ? 1 : -1; // alternate weave direction
-        // boundary swing (line pushes out as the section arrives)
-        pts.push({ x: REST + side * swing, y: start });
-        // settle back toward rest through the body of the section
-        pts.push({ x: REST, y: mid });
-      });
-      const last = sections[sections.length - 1];
-      pts.push({ x: REST, y: last.offsetTop + last.offsetHeight - 40 });
-
-      // Smooth the points into a path with quadratic midpoint smoothing.
-      let path = `M ${pts[0].x} ${pts[0].y}`;
-      for (let i = 1; i < pts.length - 1; i++) {
-        const mx = (pts[i].x + pts[i + 1].x) / 2;
-        const my = (pts[i].y + pts[i + 1].y) / 2;
-        path += ` Q ${pts[i].x} ${pts[i].y} ${mx} ${my}`;
-      }
-      const end = pts[pts.length - 1];
-      path += ` L ${end.x} ${end.y}`;
-
-      setD(path);
-      setDocH(docHeight);
-    }
-
-    build();
-    const ro = new ResizeObserver(build);
-    ro.observe(document.body);
-    window.addEventListener("resize", build);
-    // rebuild after images/fonts settle
-    const t1 = setTimeout(build, 400);
-    const t2 = setTimeout(build, 1200);
-    return () => {
-      ro.disconnect();
-      window.removeEventListener("resize", build);
-      clearTimeout(t1);
-      clearTimeout(t2);
+    const check = () => {
+      const ok =
+        window.innerWidth >= 768 &&
+        !window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      setEnabled(ok);
+      setSize({ w: Math.min(window.innerWidth * 0.2, 240), h: window.innerHeight });
     };
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
   }, []);
 
-  // Measure path length whenever the path changes.
-  useEffect(() => {
-    if (pathRef.current && d) setPathLen(pathRef.current.getTotalLength());
-  }, [d]);
+  // build a weaving sine path that spans the viewport height
+  const path = (() => {
+    const { w, h } = size;
+    const cx = w * 0.45;
+    const amp = w * 0.4; // how far it swings left/right
+    const waves = Math.max(2, Math.round(h / 320)); // swings per screen
+    const steps = 60;
+    let d = "";
+    for (let i = 0; i <= steps; i++) {
+      const y = (h / steps) * i;
+      const x = cx + amp * Math.sin((i / steps) * waves * Math.PI * 2);
+      d += i === 0 ? `M ${x.toFixed(1)} ${y.toFixed(1)}` : ` L ${x.toFixed(1)} ${y.toFixed(1)}`;
+    }
+    return d;
+  })();
 
-  // Drive the draw + dot on scroll.
+  const [len, setLen] = useState(0);
   useEffect(() => {
-    if (!enabled || !pathLen) return;
+    if (pathRef.current) setLen(pathRef.current.getTotalLength());
+  }, [path]);
+
+  // drive draw + dot on scroll
+  useEffect(() => {
+    if (!enabled || !len) return;
     let raf = 0;
-
-    function onScroll() {
+    const onScroll = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = scrollable > 0 ? Math.min(Math.max(window.scrollY / scrollable, 0), 1) : 0;
-        const drawn = pathLen * progress;
-
-        if (pathRef.current) {
-          pathRef.current.style.strokeDashoffset = String(pathLen - drawn);
-        }
+        const max = document.documentElement.scrollHeight - window.innerHeight;
+        const p = max > 0 ? Math.min(Math.max(window.scrollY / max, 0), 1) : 0;
+        const drawn = len * p;
+        if (drawRef.current) drawRef.current.style.strokeDashoffset = String(len - drawn);
         if (dotRef.current && pathRef.current) {
-          const p = pathRef.current.getPointAtLength(drawn);
-          dotRef.current.setAttribute("transform", `translate(${p.x} ${p.y})`);
+          const pt = pathRef.current.getPointAtLength(drawn);
+          dotRef.current.setAttribute("transform", `translate(${pt.x} ${pt.y})`);
         }
       });
-    }
-
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
     return () => {
       window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
       cancelAnimationFrame(raf);
     };
-  }, [enabled, pathLen]);
+  }, [enabled, len]);
 
   if (!enabled) return null;
 
   return (
-    <div ref={wrapRef} className="pointer-events-none absolute inset-0 z-[5] hidden md:block" aria-hidden>
-      <svg width="100%" height={docH} className="absolute left-0 top-0" style={{ overflow: "visible" }}>
+    <div
+      aria-hidden
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: size.w,
+        height: "100vh",
+        pointerEvents: "none",
+        zIndex: 30,
+      }}
+    >
+      <style>{`@keyframes blpulse{0%,100%{opacity:.35;transform:scale(1)}50%{opacity:.7;transform:scale(1.6)}}`}</style>
+      <svg width={size.w} height={size.h} style={{ overflow: "visible", display: "block" }}>
         <defs>
-          <linearGradient id="line-grad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#E5283C" stopOpacity="0.9" />
-            <stop offset="100%" stopColor="#F25563" stopOpacity="0.9" />
+          <linearGradient id="bl-grad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#E5283C" />
+            <stop offset="100%" stopColor="#F25563" />
           </linearGradient>
-          <filter id="dot-glow" x="-200%" y="-200%" width="500%" height="500%">
-            <feGaussianBlur stdDeviation="4" result="b" />
-            <feMerge>
-              <feMergeNode in="b" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
         </defs>
 
         {/* faint full track */}
-        <path d={d} fill="none" stroke="#41618F" strokeOpacity="0.18" strokeWidth="1.5" strokeLinecap="round" />
+        <path ref={pathRef} d={path} fill="none" stroke="#94a3b8" strokeOpacity="0.25" strokeWidth="1.5" />
 
-        {/* drawn (progress) line */}
+        {/* drawn progress line */}
         <path
-          ref={pathRef}
-          d={d}
+          ref={drawRef}
+          d={path}
           fill="none"
-          stroke="url(#line-grad)"
-          strokeWidth="1.75"
+          stroke="url(#bl-grad)"
+          strokeWidth="2"
           strokeLinecap="round"
           style={{
-            strokeDasharray: pathLen,
-            strokeDashoffset: pathLen,
-            filter: "drop-shadow(0 0 3px rgba(229,40,60,0.55))",
+            strokeDasharray: len,
+            strokeDashoffset: len,
+            filter: "drop-shadow(0 0 4px rgba(229,40,60,0.7))",
           }}
         />
 
         {/* glowing dot at the tip */}
-        <g ref={dotRef} filter="url(#dot-glow)">
-          <circle r="6" fill="#F25563" opacity="0.35" />
-          <circle r="3" fill="#fff" />
-          <circle r="3" fill="#E5283C" opacity="0.5" />
+        <g ref={dotRef}>
+          <circle r="7" fill="#F25563" style={{ animation: "blpulse 1.8s ease-in-out infinite", transformOrigin: "center" }} />
+          <circle r="3.5" fill="#fff" />
         </g>
       </svg>
     </div>
