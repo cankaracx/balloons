@@ -1,101 +1,97 @@
-export type Locale = "en" | "tr";
+// Single editable content document for the BALLOONS site.
 
-/** A piece of text that exists in both languages. */
-export type Localized = { en: string; tr: string };
+export type Brand = { name: string; logoUrl: string | null };
 
-export type Stat = { id: string; label: Localized; value: Localized };
+export type NavLink = { id: string; label: string; href: string };
 
-export type Tier = {
-  id: string;
-  name: Localized;
-  amount: Localized; // e.g. "₺50,000+" — kept as free text so it can be any currency/range
-  perks: Localized; // newline-separated list of perks
-  featured: boolean;
+export type Hero = {
+  eyebrow: string;
+  title: string;
+  sub: string;
+  ctaPrimary: string;
+  ctaSecondary: string;
 };
 
-export type OutreachItem = { id: string; title: Localized; body: Localized };
+export type Stat = { id: string; n: string; d: string };
 
-/** All editable site copy (everything that is not a member/sponsor/gallery row). */
-export type Content = {
-  brand: {
-    name: string; // "BALLOONS"
-    teamNumber: string; // "" until assigned
-    logoUrl: string | null; // null => use the built-in SVG pufferfish
-  };
-  hero: {
-    eyebrow: Localized;
-    title: string; // wordmark, language-independent
-    tagline: Localized;
-    ctaPrimary: Localized;
-    ctaSecondary: Localized;
-  };
-  about: {
-    heading: Localized;
-    body: Localized;
-    stats: Stat[];
-  };
-  sponsors: {
-    heading: Localized;
-    pitch: Localized;
-    cta: Localized;
-    emptyState: Localized;
-    tiers: Tier[];
-  };
-  team: {
-    heading: Localized;
-    intro: Localized;
-    emptyState: Localized;
-  };
-  gallery: {
-    heading: Localized;
-    intro: Localized;
-    emptyState: Localized;
-  };
-  outreach: {
-    heading: Localized;
-    body: Localized;
-    items: OutreachItem[];
-  };
-  contact: {
-    heading: Localized;
-    body: Localized;
-    email: string;
-    phone: string;
-    location: Localized;
-    instagram: string; // handle without @, or full URL
-    linkedin: string;
-  };
+export type About = {
+  idx: string;
+  label: string;
+  headingLead: string; // underlined portion
+  headingRest: string;
+  body: string;
+  stats: Stat[];
 };
 
-export type Member = {
-  id: string;
-  name: string;
-  role: Localized;
-  bio: Localized;
-  photoUrl: string | null;
-  sort: number;
+export type SupportCell = { id: string; key: string; title: string; body: string };
+export type Support = {
+  idx: string;
+  label: string;
+  headingPre: string;
+  headingUnderline: string;
+  body: string;
+  cells: SupportCell[];
+  cta: string;
 };
 
-export type Sponsor = {
-  id: string;
-  name: string;
-  logoUrl: string | null;
-  website: string;
-  tier: string; // matches a Tier name (en), or free text
-  description: Localized;
-  sort: number;
+export type Sponsor = { id: string; name: string; logoUrl: string | null };
+export type Sponsors = {
+  idx: string;
+  label: string;
+  headingPre: string;
+  headingUnderline: string;
+  body: string;
+  items: Sponsor[];
 };
 
-export type GalleryImage = {
-  id: string;
-  url: string;
-  caption: Localized;
-  sort: number;
+export type Member = { id: string; initials: string; name: string; role: string; body: string; photoUrl: string | null };
+export type Team = {
+  idx: string;
+  label: string;
+  headingPre: string;
+  headingUnderline: string;
+  members: Member[];
+};
+
+export type Frame = { id: string; caption: string; photoUrl: string | null; span: "a" | "b" | "c" | "" };
+export type Work = {
+  idx: string;
+  label: string;
+  headingPre: string;
+  headingUnderline: string;
+  frames: Frame[];
+};
+
+export type OutreachRow = { id: string; num: string; title: string; body: string };
+export type Outreach = {
+  idx: string;
+  label: string;
+  headingPre: string;
+  headingUnderline: string;
+  rows: OutreachRow[];
+};
+
+export type ContactDetail = { id: string; k: string; v: string };
+export type Contact = {
+  idx: string;
+  label: string;
+  headingPre: string;
+  headingUnderline: string;
+  email: string;
+  details: ContactDetail[];
 };
 
 export type SiteData = {
-  content: Content;
-  members: Member[];
-  sponsors: Sponsor[];
-  gallery: GalleryImage[];
+  brand: Brand;
+  nav: { links: NavLink[]; cta: string };
+  hero: Hero;
+  marquee: { items: string[] };
+  about: About;
+  support: Support;
+  sponsors: Sponsors;
+  team: Team;
+  work: Work;
+  outreach: Outreach;
+  contact: Contact;
+  footer: { blurb: string };
 };
