@@ -21,8 +21,8 @@ a{color:inherit;text-decoration:none}
 
 .mono{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase}
 .idx{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--accent)}
-h2.t{font-size:clamp(28px,4.4vw,52px);font-weight:800;letter-spacing:-.03em;line-height:1.04}
-.body{font-size:clamp(16px,1.5vw,19px);line-height:1.62;color:var(--ink-soft)}
+h2.t{font-size:clamp(28px,4.4vw,52px);font-weight:800;letter-spacing:-.03em;line-height:1.15;text-wrap:balance}
+.body{font-size:clamp(16px,1.5vw,19px);line-height:1.62;color:var(--ink-soft);overflow-wrap:break-word}
 
 .btn{display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:600;cursor:pointer;
   padding:13px 22px;border-radius:2px;border:1.5px solid var(--ink);background:none;color:var(--ink);transition:.2s}
@@ -42,9 +42,9 @@ header.scr{border-color:var(--hair)}
 .nav-mid a:hover{color:var(--ink)}
 @media(max-width:880px){.nav-mid{display:none}}
 
-.hero{min-height:100vh;display:flex;align-items:center;position:relative;padding:110px 0 40px;overflow:hidden}
+.hero{min-height:100vh;display:flex;align-items:center;position:relative;padding:110px 0 40px;overflow-x:clip;overflow-y:visible}
 .hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:40px;width:100%}
-.hero h1{font-size:clamp(72px,15vw,184px);font-weight:800;letter-spacing:-.05em;line-height:.86;margin:14px 0}
+.hero h1{font-size:clamp(72px,15vw,184px);font-weight:800;letter-spacing:-.05em;line-height:.92;margin:14px 0;text-wrap:balance}
 .hero .sub{max-width:34ch;margin-top:8px}
 .hero .cta{margin-top:34px;display:flex;flex-wrap:wrap;gap:12px}
 .fish-wrap{position:relative;display:flex;justify-content:center}
@@ -138,9 +138,18 @@ footer{background:var(--ink);color:var(--bone);padding:60px 0 36px}
 /* reveal + underline */
 .rv{opacity:0;transform:translateY(24px);transition:opacity .75s cubic-bezier(.16,1,.3,1),transform .75s cubic-bezier(.16,1,.3,1)}
 .rv.in{opacity:1;transform:none}
-.uline{position:relative;display:inline-block}
-.uline::after{content:"";position:absolute;left:0;bottom:-10px;height:3px;width:0;background:var(--accent);transition:width .8s cubic-bezier(.16,1,.3,1) .15s}
-.in .uline::after,.uline.in::after{width:100%}
+.uline{
+  display:inline;
+  box-decoration-break:clone;
+  -webkit-box-decoration-break:clone;
+  background-image:linear-gradient(var(--accent),var(--accent));
+  background-repeat:no-repeat;
+  background-size:0 3px;
+  background-position:0 calc(100% - .06em);
+  padding-bottom:.14em;
+  transition:background-size .8s cubic-bezier(.16,1,.3,1) .15s;
+}
+.in .uline,.uline.in{background-size:100% 3px}
 
 /* ---------- edit mode ---------- */
 .edit [data-edit]{outline:1px dashed rgba(238,74,27,.0);transition:outline-color .15s,background .15s;border-radius:3px}
@@ -165,3 +174,27 @@ footer{background:var(--ink);color:var(--bone);padding:60px 0 36px}
 .editbar .save{background:var(--accent);color:#fff} .editbar .save:disabled{opacity:.5;cursor:default}
 .editbar .ghost{background:rgba(255,255,255,.12);color:var(--bone)}
 .editbar .status{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.7}
+
+/* ---------- mobile ---------- */
+@media(max-width:760px){
+  html{scroll-padding-top:68px}
+  .wrap,.nav{padding:0 20px}
+  .sec{padding:80px 0}
+  .hero{min-height:auto;padding:96px 0 36px}
+  .hero h1{font-size:clamp(52px,16vw,80px);line-height:.96;letter-spacing:-.04em}
+  h2.t{font-size:clamp(26px,7vw,40px);line-height:1.2;max-width:none!important}
+  .about-grid h2.t{margin-bottom:4px}
+  .ben .cell{padding:24px}
+  .person{padding:24px}
+  .clist .cr{flex-direction:column;align-items:flex-start;gap:6px}
+  .big-mail{word-break:break-word;overflow-wrap:anywhere;line-height:1.15}
+  .editbar{left:16px;right:16px;transform:none;justify-content:center;bottom:max(14px,env(safe-area-inset-bottom))}
+}
+@media(max-width:520px){
+  .nav{height:60px;gap:10px}
+  .logo{font-size:16px;min-width:0;flex-shrink:1}
+  .nav .btn.fill{font-size:12px;padding:8px 11px;flex-shrink:0}
+  .hero .cta{gap:10px}
+  .hero .cta .btn{width:100%;justify-content:center}
+  .orow{grid-template-columns:48px 1fr;gap:16px;padding:24px 0}
+}
