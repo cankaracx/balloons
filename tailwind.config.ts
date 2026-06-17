@@ -21,9 +21,9 @@ const config: Config = {
         ink: "#16203A", // body text on light
       },
       fontFamily: {
-  display: ["-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
-  sans: ["-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "sans-serif"],
-},
+        display: ["var(--font-display)", "ui-sans-serif", "system-ui", "sans-serif"],
+        sans: ["var(--font-body)", "ui-sans-serif", "system-ui", "sans-serif"],
+      },
       maxWidth: {
         content: "1120px",
       },
