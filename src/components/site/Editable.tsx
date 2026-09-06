@@ -13,6 +13,7 @@ export function EText({
   className,
   href,
   style,
+  onClick,
 }: {
   value: string;
   onChange: (v: string) => void;
@@ -20,6 +21,7 @@ export function EText({
   className?: string;
   href?: string;
   style?: React.CSSProperties;
+  onClick?: () => void;
 }) {
   const { editMode } = useEdit();
   const ref = useRef<HTMLElement>(null);
@@ -52,13 +54,13 @@ export function EText({
   // view mode
   if (as === "a") {
     return (
-      <Tag href={href} className={className} style={style}>
+      <Tag href={href} className={className} style={style} onClick={onClick}>
         {value}
       </Tag>
     );
   }
   return (
-    <Tag className={className} style={style}>
+    <Tag className={className} style={style} onClick={onClick}>
       {value}
     </Tag>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { EditProvider, useEdit } from "./EditCtx";
 import { EText, EImage, ItemControls, AddButton, rid, moveItem } from "./Editable";
 import Pufferfish from "./Pufferfish";
@@ -16,6 +16,20 @@ export default function Site({ data, canEdit }: { data: SiteData; canEdit: boole
 
 function Page() {
   const { data, mut, editMode, canEdit } = useEdit();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setMenuOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    document.body.style.overflow = "hidden";
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
 
   // scroll-reveal + nav shadow
   useEffect(() => {
@@ -44,7 +58,7 @@ function Page() {
       {/* NAV */}
       <header id="hdr">
         <div className="nav">
-          <a href="#top" className="logo">
+          <a href="#top" className="logo" onClick={() => setMenuOpen(false)}>
             <span style={{ width: 30, height: 30, display: "inline-block" }}>{logo(30)}</span>
             <EText value={b.brand.name} onChange={(v) => mut((d) => (d.brand.name = v))} />
           </a>
@@ -53,10 +67,36 @@ function Page() {
               <EText key={l.id} as="a" href={l.href} value={l.label} onChange={(v) => mut((d) => (d.nav.links[i].label = v))} />
             ))}
           </nav>
-          <a href="#support" className="btn fill" style={{ padding: "9px 16px" }}>
+          <div className="nav-end">
+            <a href="#support" className="btn fill nav-cta" style={{ padding: "9px 16px" }}>
+              <EText value={b.nav.cta} onChange={(v) => mut((d) => (d.nav.cta = v))} />
+            </a>
+            <button
+              type="button"
+              className="nav-toggle"
+              aria-expanded={menuOpen}
+              aria-controls="mobile-nav"
+              onClick={() => setMenuOpen((open) => !open)}
+            >
+              {menuOpen ? "Close" : "Menu"}
+            </button>
+          </div>
+        </div>
+        <nav id="mobile-nav" className={`nav-drawer${menuOpen ? " open" : ""}`} hidden={!menuOpen}>
+          {b.nav.links.map((l, i) => (
+            <EText
+              key={l.id}
+              as="a"
+              href={l.href}
+              value={l.label}
+              onChange={(v) => mut((d) => (d.nav.links[i].label = v))}
+              onClick={() => setMenuOpen(false)}
+            />
+          ))}
+          <a href="#support" className="btn fill" onClick={() => setMenuOpen(false)}>
             <EText value={b.nav.cta} onChange={(v) => mut((d) => (d.nav.cta = v))} />
           </a>
-        </div>
+        </nav>
       </header>
 
       {/* HERO */}
@@ -319,16 +359,40 @@ function Marquee() {
 }
 
 function EditBar() {
-  const { editMode, setEditMode, save, status } = useEdit();
+  const { editMode, setEditMode, requestExit, save, status, dirty, errorMessage } = useEdit();
+
+  async function signOut() {
+    if (dirty && !window.confirm("You have unsaved changes. Sign out anyway?")) return;
+    await fetch("/api/auth/logout", { method: "POST" });
+    window.location.reload();
+  }
+
+  const statusLabel =
+    errorMessage
+      ? errorMessage
+      : status === "saving"
+        ? "Saving…"
+        : status === "saved"
+          ? "Saved ✓"
+          : status === "error"
+            ? "Save failed"
+            : dirty
+              ? "Unsaved changes"
+              : "Editing";
+
   return (
     <div className="editbar">
       {!editMode ? (
-        <button className="save" onClick={() => setEditMode(true)}>Edit page</button>
+        <>
+          <button className="save" onClick={() => setEditMode(true)}>Edit page</button>
+          <button className="ghost" onClick={signOut}>Sign out</button>
+        </>
       ) : (
         <>
-          <span className="status">{status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Error" : "Editing"}</span>
-          <button className="save" onClick={save} disabled={status === "saving"}>Save</button>
-          <button className="ghost" onClick={() => setEditMode(false)}>Done</button>
+          <span className={`status${errorMessage || status === "error" ? " err" : ""}`}>{statusLabel}</span>
+          <button className="save" onClick={save} disabled={status === "saving" || !dirty}>Save</button>
+          <button className="ghost" onClick={requestExit}>Done</button>
+          <button className="ghost" onClick={signOut}>Sign out</button>
         </>
       )}
     </div>

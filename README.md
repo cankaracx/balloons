@@ -1,21 +1,20 @@
 # BALLOONS — FRC Team Website + CMS
 
-A fast, bilingual (English / Türkçe), single-page website for the **BALLOONS** rookie FRC team at TED Antalya Koleji — with a friendly built-in admin panel so anyone on the team can edit every word, photo, member, and sponsor without touching code.
+A fast single-page website for the **BALLOONS** rookie FRC team at TED Antalya Koleji — with an inline editor so anyone on the team can change text, photos, members, and sponsors without touching code.
 
-Built to attract sponsors and look the part: clean, Apple-minimalist, with a signature red pufferfish that gently "breathes" (small by nature, built to expand far beyond its size — the rookie metaphor).
+Built to attract sponsors: clean and minimal, with a signature red pufferfish that gently "breathes" (small by nature, built to expand far beyond its size — the rookie metaphor).
 
 ---
 
 ## 1. What you get
 
-- **Public site** — one smooth-scrolling page: Home, About, Sponsors, Team, Gallery, Outreach, Contact. Language switcher top-right. Fully responsive, SEO-ready (sitemap, robots, Open Graph, JSON-LD), fast (≈94 kB JS on first load).
-- **Admin panel** at `/admin` — log in with a password, then edit:
-  - All section text (every field is English + Türkçe side by side)
-  - Team members (photo, name, role, bio) — add, edit, reorder, delete
-  - Sponsors (logo, website, tier, description) — same controls
-  - Gallery images with captions
-  - Sponsorship tiers, stats, and outreach items
-  - Your logo, team name, and team number
+- **Public site** — one smooth-scrolling page: Home, About, Support, Sponsors, Team, Workshop, Outreach, Contact. Desktop section links plus a **mobile menu** on smaller screens. Fully responsive, SEO-ready (sitemap, robots), fast.
+- **Inline editor** — log in at `/admin` with a shared password, then click **Edit page** on the homepage:
+  - Click any text to change it
+  - Click any photo to replace it
+  - Add, reorder, or delete team members, sponsors, workshop frames, stats, and outreach items
+  - **Save** writes the whole page; **Done** warns you if there are unsaved changes
+  - **Sign out** ends the shared session
 - **Two ways to run:**
   - **Local demo mode** — works the instant you run it, no accounts needed. Saves to a local file.
   - **Production mode** — connect Supabase (free) for permanent storage + image hosting.
@@ -38,14 +37,14 @@ Browser ──▶ Next.js 14 (App Router, on Vercel)
                          when Supabase isn't configured)
 ```
 
-**The key idea:** all editable content lives in **one JSON object** called `SiteData` (text, members, sponsors, gallery). It's stored as a single row (`id = 1`) in a Postgres table called `site`, in a `jsonb` column called `data`. There's no complex schema to manage — the whole site is one document you read and write atomically.
+**The key idea:** all editable content lives in **one JSON object** called `SiteData` (text, members, sponsors, workshop photos). It's stored as a single row (`id = 1`) in a Postgres table called `site`, in a `jsonb` column called `data`. There's no complex schema to manage — the whole site is one document you read and write atomically.
 
 **Why this stack:**
 
 - **Next.js 14 + TypeScript** — industry standard, great free hosting on Vercel, server-rendered for SEO. Pinned to the stable 14.2.x line (not 15) for fewer surprises.
-- **Tailwind CSS** — styling without juggling separate CSS files; the brand palette is defined once in `tailwind.config.ts`.
+- **Plain CSS + Tailwind utilities** — brand colors live in `src/app/globals.css`.
 - **Supabase** — a hosted Postgres database + file storage with a generous free tier and a friendly dashboard. No backend server to run.
-- **Lightweight auth** — one password, a signed `httpOnly` cookie (using `jose`). No third-party login service, nothing to configure. Perfect for a single shared team account.
+- **Lightweight auth** — one password, a signed `httpOnly` cookie (using `jose`). No third-party login service.
 - **Reordering** — simple up/down buttons (robust, works on mobile) rather than drag-and-drop.
 
 **Folder map:**
@@ -54,26 +53,20 @@ Browser ──▶ Next.js 14 (App Router, on Vercel)
 src/
   app/
     page.tsx              Public homepage (server component)
-    layout.tsx            Fonts, SEO metadata, JSON-LD
+    layout.tsx            SEO metadata
     sitemap.ts robots.ts  SEO
     icon.svg              Pufferfish favicon
-    admin/
-      page.tsx            Login page
-      dashboard/page.tsx  The CMS (protected by middleware)
+    admin/page.tsx        Login page
     api/
       auth/login          Sets the session cookie
       auth/logout         Clears it
       upload              Receives image uploads
-  components/
-    public/               Nav, Hero, About, Sponsors, Team, Gallery,
-                          Outreach, Contact, Footer, Pufferfish, …
-    admin/                Dashboard + one editor per content type
+  components/site/        Homepage, inline editor, pufferfish
   lib/
     types.ts              The SiteData shape
     store.ts              Read/write data + upload images (dual-mode)
-    supabase.ts auth.ts guard.ts i18n.ts
-  middleware.ts           Protects /admin/dashboard
-  actions/site.ts         Server actions for every edit
+    supabase.ts auth.ts guard.ts
+  actions/site.ts         Save server action
 content/
   seed.json               Default content (the starting point)
 public/uploads/           Local-mode image folder
@@ -92,7 +85,7 @@ npm run dev
 
 Open **http://localhost:3000** — the public site is live with placeholder content.
 
-Open **http://localhost:3000/admin** and log in with the demo password **`balloons`**. Edit anything; changes save to `content/db.json` and show up immediately.
+Open **http://localhost:3000/admin** and log in with the demo password **`balloons`**. You return to the homepage with an **Edit page** bar at the bottom. Click text or photos to change them; **Save** writes to `content/db.json`.
 
 > Local mode is for development and preview only. The file resets when you redeploy, so connect Supabase before going live (next section).
 
@@ -135,7 +128,7 @@ You don't need to insert a row — the app seeds it automatically on first load.
 
 1. Go to **Storage → New bucket**.
 2. Name it exactly **`balloons-media`** and tick **Public bucket** (so logos and photos are viewable by visitors). Create it.
-3. Public buckets allow anyone to *read* files via their URL, which is what we want for a public website. Uploads still go only through your authenticated admin panel.
+3. Public buckets allow anyone to *read* files via their URL, which is what we want for a public website. Uploads still go only through your authenticated editor.
 
 If you ever want to be explicit about the read policy, run this in the SQL editor:
 
@@ -174,49 +167,38 @@ In Supabase: **Settings → API**. You need two values:
 
 ---
 
-## 5. Using the admin panel
+## 5. Using the editor
 
-Go to `/admin`, log in, and use the tabs:
+1. Go to `/admin` and log in.
+2. On the homepage, click **Edit page** in the bottom bar.
+3. Click any text or photo. Use the small ↑ / ↓ / × controls on cards to reorder or delete.
+4. Click **Save**. The bar shows **Unsaved changes** until you do.
+5. **Done** asks for confirmation if you still have unsaved edits. **Sign out** clears the login cookie (sessions last 7 days otherwise).
 
-- **Content** — all section text. Each field has an English and a Türkçe box. There's a **Save changes** bar at the bottom; it lights up when you have unsaved edits.
-- **Team** — add members with a photo, name, role, and bio. Use ↑ / ↓ to set the order shown on the site.
-- **Sponsors** — add a logo, website, tier, and description. Logos arrange automatically; until you add any, the site shows an inviting "your logo here" placeholder. Tiers (Title Partner, Gold, …) and their perks are edited in the **Content** tab.
-- **Gallery** — upload photos and add optional captions.
-- **Logo & Brand** — upload a logo (leave it empty to use the built-in pufferfish), set the team name, and set your team number once FIRST assigns it (the site hides the number until you fill it in).
-
-Editing tips: the language switch on the public site (top-right) shows the *other* language, and remembers a visitor's choice. Saving in admin updates the live site instantly.
+Editing tips: the whole page is one document, so last write wins. Fine for a small team — don't have two people save at the same time.
 
 ---
 
 ## 6. Customizing the look
 
-- **Colors / fonts:** `tailwind.config.ts` (navy, scarlet, paper) and `src/app/layout.tsx` (Space Grotesk + Inter).
-- **The pufferfish:** `src/components/public/Pufferfish.tsx` — pure SVG, scales to any size.
-- **Default starting content:** `content/seed.json`. (Once you're on Supabase, edits happen in the admin panel, not here.)
-- **Section order/background rhythm:** `src/components/public/Site.tsx`.
+- **Colors / fonts:** `src/app/globals.css` (`:root` variables).
+- **The pufferfish:** `src/components/site/Pufferfish.tsx` — pure SVG, scales to any size.
+- **Default starting content:** `content/seed.json`. (Once you're on Supabase, edits happen in the editor, not here.)
+- **Section order:** `src/components/site/Site.tsx`.
 
 ---
 
 ## 7. Assumptions & limitations
 
 - **One shared admin account.** Edits are last-write-wins — fine for a small team; not designed for many simultaneous editors.
-- **The Türkçe copy is a solid first draft.** Review and polish it in the admin panel — you know the team's voice.
-- **Gallery placeholders** in the seed use sample images; replace them with real photos.
 - **Local mode is not persistent in production** — always connect Supabase before launch.
 - **Images** are capped at 6 MB each and must be image files.
-- I couldn't provision a live Supabase project from here, so the cloud path is written carefully and the app was **build-verified and tested end-to-end in local mode** (login, auth protection, content editing, image upload, reordering all confirmed working).
 
 ---
 
-## 8. Hosting recommendation (beginner-friendly)
+## 8. Hosting recommendation
 
-**Vercel (website) + Supabase (data & images) — both free tiers.** This is the path documented above and the easiest by a wide margin: push to GitHub, click deploy, paste five environment variables. No servers to manage, automatic HTTPS, global CDN, and free hosting that comfortably covers a team site's traffic. Add a custom domain whenever you're ready (Vercel walks you through it).
-
----
-
-## 9. A note on dependencies
-
-Next.js is pinned to the latest patched **14.2.x** release, which includes all current security fixes for that line. `npm audit` may still report two advisories inside packages that Next.js bundles internally; clearing those would require upgrading to Next 16 (a major version with breaking changes), which isn't worth it for a stable team site. Nothing here affects a normally deployed site. If you ever want to move to Next 16 later, do it as a deliberate upgrade.
+**Vercel (website) + Supabase (data & images) — both free tiers.** Push to GitHub, click deploy, paste the environment variables. No servers to manage, automatic HTTPS, global CDN. Add a custom domain whenever you're ready.
 
 ---
 

@@ -40,7 +40,20 @@ header.scr{border-color:var(--hair)}
 .nav-mid{display:flex;gap:28px}
 .nav-mid a{font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);transition:color .2s}
 .nav-mid a:hover{color:var(--ink)}
-@media(max-width:880px){.nav-mid{display:none}}
+.nav-end{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.nav-toggle{display:none;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;
+  padding:8px 12px;border:1.5px solid var(--ink);background:none;color:var(--ink);cursor:pointer;border-radius:2px}
+.nav-toggle:hover{background:var(--ink);color:var(--bone)}
+.nav-drawer{display:none}
+@media(max-width:880px){
+  .nav-mid{display:none}
+  .nav-cta{display:none}
+  .nav-toggle{display:inline-flex}
+  .nav-drawer{display:none;flex-direction:column;gap:4px;padding:8px 20px 20px;background:rgba(247,244,237,.96);border-bottom:1px solid var(--hair)}
+  .nav-drawer.open{display:flex}
+  .nav-drawer a{font-family:var(--mono);font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink);padding:12px 4px;border-bottom:1px solid var(--hair)}
+  .nav-drawer .btn{margin-top:12px;justify-content:center}
+}
 
 .hero{min-height:100vh;display:flex;align-items:center;position:relative;padding:110px 0 40px;overflow-x:clip;overflow-y:visible}
 .hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:40px;width:100%}
@@ -173,7 +186,8 @@ footer{background:var(--ink);color:var(--bone);padding:60px 0 36px}
 .editbar button{font-family:var(--sans);font-size:13px;font-weight:600;padding:8px 16px;border-radius:999px;border:0;cursor:pointer}
 .editbar .save{background:var(--accent);color:#fff} .editbar .save:disabled{opacity:.5;cursor:default}
 .editbar .ghost{background:rgba(255,255,255,.12);color:var(--bone)}
-.editbar .status{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.7}
+.editbar .status{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.7;max-width:28ch;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.editbar .status.err{color:#ffb4a2;opacity:1}
 
 /* ---------- mobile ---------- */
 @media(max-width:760px){
