@@ -59,7 +59,14 @@ export async function saveData(data: SiteData): Promise<void> {
     return;
   }
   await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(DB_FILE, JSON.stringify(data, null, 2), "utf8");
+  const tempFile = `${DB_FILE}.${process.pid}.${Date.now()}.tmp`;
+  try {
+    await fs.writeFile(tempFile, JSON.stringify(data, null, 2), "utf8");
+    await fs.rename(tempFile, DB_FILE);
+  } catch (error) {
+    await fs.rm(tempFile, { force: true }).catch(() => undefined);
+    throw error;
+  }
 }
 
 // ────────────────────────────────────────────────────────────

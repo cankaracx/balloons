@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { EditProvider, useEdit } from "./EditCtx";
 import { EText, EImage, ItemControls, AddButton, rid, moveItem } from "./Editable";
 import Pufferfish from "./Pufferfish";
@@ -16,6 +16,7 @@ export default function Site({ data, canEdit }: { data: SiteData; canEdit: boole
 
 function Page() {
   const { data, mut, editMode, canEdit } = useEdit();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   // scroll-reveal + nav shadow
   useEffect(() => {
@@ -33,6 +34,15 @@ function Page() {
       window.removeEventListener("scroll", onScroll);
     };
   }, [data, editMode]);
+
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setMobileOpen(false);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [mobileOpen]);
 
   const b = data;
   const logo = (size: number) => (
@@ -53,10 +63,35 @@ function Page() {
               <EText key={l.id} as="a" href={l.href} value={l.label} onChange={(v) => mut((d) => (d.nav.links[i].label = v))} />
             ))}
           </nav>
-          <a href="#support" className="btn fill" style={{ padding: "9px 16px" }}>
+          <a href="#support" className="btn fill nav-cta" style={{ padding: "9px 16px" }}>
             <EText value={b.nav.cta} onChange={(v) => mut((d) => (d.nav.cta = v))} />
           </a>
+          <button
+            type="button"
+            className="menu-toggle"
+            aria-label={mobileOpen ? "Close navigation" : "Open navigation"}
+            aria-controls="mobile-navigation"
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((open) => !open)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
         </div>
+        <nav
+          id="mobile-navigation"
+          className={`mobile-nav ${mobileOpen ? "open" : ""}`}
+          aria-hidden={!mobileOpen}
+          onClick={() => setMobileOpen(false)}
+        >
+          {b.nav.links.map((l, i) => (
+            <EText key={l.id} as="a" href={l.href} value={l.label} onChange={(v) => mut((d) => (d.nav.links[i].label = v))} />
+          ))}
+          <a href="#support" className="mobile-nav-cta">
+            {b.nav.cta} <span aria-hidden="true">→</span>
+          </a>
+        </nav>
       </header>
 
       {/* HERO */}
@@ -319,16 +354,16 @@ function Marquee() {
 }
 
 function EditBar() {
-  const { editMode, setEditMode, save, status } = useEdit();
+  const { editMode, setEditMode, save, status, dirty } = useEdit();
   return (
     <div className="editbar">
       {!editMode ? (
         <button className="save" onClick={() => setEditMode(true)}>Edit page</button>
       ) : (
         <>
-          <span className="status">{status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Error" : "Editing"}</span>
-          <button className="save" onClick={save} disabled={status === "saving"}>Save</button>
-          <button className="ghost" onClick={() => setEditMode(false)}>Done</button>
+          <span className="status">{status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Save failed" : dirty ? "Unsaved changes" : "Up to date"}</span>
+          <button className="save" onClick={save} disabled={status === "saving" || !dirty}>Save</button>
+          <button className="ghost" onClick={() => setEditMode(false)} disabled={dirty} title={dirty ? "Save your changes first" : undefined}>Done</button>
         </>
       )}
     </div>

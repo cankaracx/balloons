@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { SiteData } from "@/lib/types";
 import { saveSite } from "@/actions/site";
 
@@ -11,6 +11,7 @@ type Ctx = {
   editMode: boolean;
   canEdit: boolean;
   status: Status;
+  dirty: boolean;
   setEditMode: (v: boolean) => void;
   mut: (fn: (draft: SiteData) => void) => void;
   save: () => void;
@@ -36,10 +37,20 @@ export function EditProvider({
   const [data, setData] = useState<SiteData>(initial);
   const [editMode, setEditMode] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
-  const dirty = useRef(false);
+  const [dirty, setDirty] = useState(false);
+
+  useEffect(() => {
+    if (!dirty) return;
+    const warnAboutUnsavedChanges = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = "";
+    };
+    window.addEventListener("beforeunload", warnAboutUnsavedChanges);
+    return () => window.removeEventListener("beforeunload", warnAboutUnsavedChanges);
+  }, [dirty]);
 
   const mut = (fn: (d: SiteData) => void) => {
-    dirty.current = true;
+    setDirty(true);
     setStatus("idle");
     setData((prev) => {
       const d = structuredClone(prev);
@@ -49,10 +60,11 @@ export function EditProvider({
   };
 
   const save = async () => {
+    if (!dirty) return;
     setStatus("saving");
     try {
       await saveSite(data);
-      dirty.current = false;
+      setDirty(false);
       setStatus("saved");
       setTimeout(() => setStatus((s) => (s === "saved" ? "idle" : s)), 2000);
     } catch (e) {
@@ -75,7 +87,7 @@ export function EditProvider({
   };
 
   return (
-    <EditContext.Provider value={{ data, editMode, canEdit, status, setEditMode, mut, save, upload }}>
+    <EditContext.Provider value={{ data, editMode, canEdit, status, dirty, setEditMode, mut, save, upload }}>
       <div className={editMode ? "edit" : undefined}>{children}</div>
     </EditContext.Provider>
   );
