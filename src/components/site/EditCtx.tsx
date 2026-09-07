@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { SiteData } from "@/lib/types";
 import { saveSite } from "@/actions/site";
 
@@ -38,6 +38,7 @@ export function EditProvider({
   const [editMode, setEditMode] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [dirty, setDirty] = useState(false);
+  const revision = useRef(0);
 
   useEffect(() => {
     if (!dirty) return;
@@ -50,6 +51,7 @@ export function EditProvider({
   }, [dirty]);
 
   const mut = (fn: (d: SiteData) => void) => {
+    revision.current += 1;
     setDirty(true);
     setStatus("idle");
     setData((prev) => {
@@ -61,11 +63,13 @@ export function EditProvider({
 
   const save = async () => {
     if (!dirty) return;
+    const savingRevision = revision.current;
     setStatus("saving");
     try {
       await saveSite(data);
-      setDirty(false);
-      setStatus("saved");
+      const hasNewerChanges = revision.current !== savingRevision;
+      setDirty(hasNewerChanges);
+      setStatus(hasNewerChanges ? "idle" : "saved");
       setTimeout(() => setStatus((s) => (s === "saved" ? "idle" : s)), 2000);
     } catch (e) {
       console.error(e);
