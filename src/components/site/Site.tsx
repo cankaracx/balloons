@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { EditProvider, useEdit } from "./EditCtx";
 import { EText, EImage, ItemControls, AddButton, rid, moveItem } from "./Editable";
 import Pufferfish from "./Pufferfish";
@@ -41,6 +41,9 @@ function Page() {
 
   return (
     <>
+      <a className="skip" href="#main">
+        Skip to content
+      </a>
       {/* NAV */}
       <header id="hdr">
         <div className="nav">
@@ -59,6 +62,7 @@ function Page() {
         </div>
       </header>
 
+      <main id="main">
       {/* HERO */}
       <section className="hero" id="top">
         <div className="wrap">
@@ -226,6 +230,7 @@ function Page() {
               <a href={`mailto:${b.contact.email}`} className="big-mail rv" style={{ transitionDelay: ".1s" }}>
                 <EText value={b.contact.email} onChange={(v) => mut((d) => (d.contact.email = v))} />
               </a>
+              {!editMode && <CopyEmail email={b.contact.email} />}
             </div>
             <div className="clist rv" style={{ transitionDelay: ".16s" }}>
               {b.contact.details.map((dl, i) => (
@@ -240,6 +245,7 @@ function Page() {
           </div>
         </div>
       </section>
+      </main>
 
       {/* FOOTER */}
       <footer>
@@ -318,17 +324,63 @@ function Marquee() {
   );
 }
 
+function CopyEmail({ email }: { email: string }) {
+  const [copied, setCopied] = useState(false);
+  return (
+    <button
+      type="button"
+      className="btn"
+      style={{ marginTop: 16 }}
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(email);
+          setCopied(true);
+          window.setTimeout(() => setCopied(false), 1600);
+        } catch {
+          window.prompt("Copy this email address:", email);
+        }
+      }}
+    >
+      {copied ? "Copied" : "Copy email"}
+    </button>
+  );
+}
+
 function EditBar() {
-  const { editMode, setEditMode, save, status } = useEdit();
+  const { editMode, setEditMode, save, status, dirty, signOut } = useEdit();
   return (
     <div className="editbar">
       {!editMode ? (
-        <button className="save" onClick={() => setEditMode(true)}>Edit page</button>
+        <>
+          <button className="save" onClick={() => setEditMode(true)}>
+            Edit page
+          </button>
+          <button className="ghost" onClick={() => void signOut()}>
+            Sign out
+          </button>
+        </>
       ) : (
         <>
-          <span className="status">{status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Error" : "Editing"}</span>
-          <button className="save" onClick={save} disabled={status === "saving"}>Save</button>
-          <button className="ghost" onClick={() => setEditMode(false)}>Done</button>
+          <span className="status">
+            {status === "saving"
+              ? "Saving…"
+              : status === "saved"
+                ? "Saved ✓"
+                : status === "error"
+                  ? "Error"
+                  : dirty
+                    ? "Unsaved · Ctrl/⌘S"
+                    : "Editing · Ctrl/⌘S"}
+          </span>
+          <button className="save" onClick={save} disabled={status === "saving"}>
+            Save
+          </button>
+          <button className="ghost" onClick={() => setEditMode(false)}>
+            Done
+          </button>
+          <button className="ghost" onClick={() => void signOut()}>
+            Sign out
+          </button>
         </>
       )}
     </div>

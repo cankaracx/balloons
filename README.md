@@ -8,14 +8,14 @@ Built to attract sponsors and look the part: clean, Apple-minimalist, with a sig
 
 ## 1. What you get
 
-- **Public site** — one smooth-scrolling page: Home, About, Sponsors, Team, Gallery, Outreach, Contact. Language switcher top-right. Fully responsive, SEO-ready (sitemap, robots, Open Graph, JSON-LD), fast (≈94 kB JS on first load).
-- **Admin panel** at `/admin` — log in with a password, then edit:
-  - All section text (every field is English + Türkçe side by side)
+- **Public site** — one smooth-scrolling page: Home, About, Sponsors, Team, Gallery, Outreach, Contact. Fully responsive, SEO-ready (sitemap, robots, Open Graph, JSON-LD), fast (≈94 kB JS on first load). Keyboard users can skip the header with **Skip to content**. Motion is reduced when the visitor’s system asks for it.
+- **Inline editor** — log in at `/admin`, then edit the live page in place:
+  - All section text, stats, ticker words, and contact details
   - Team members (photo, name, role, bio) — add, edit, reorder, delete
-  - Sponsors (logo, website, tier, description) — same controls
-  - Gallery images with captions
-  - Sponsorship tiers, stats, and outreach items
-  - Your logo, team name, and team number
+  - Sponsors (logo, name) — same controls
+  - Gallery frames with captions
+  - Outreach items, logo, and team name
+  - **Ctrl/⌘S** saves while editing; **Copy email** on the contact block; **Sign out** from the floating bar
 - **Two ways to run:**
   - **Local demo mode** — works the instant you run it, no accounts needed. Saves to a local file.
   - **Production mode** — connect Supabase (free) for permanent storage + image hosting.
@@ -54,26 +54,21 @@ Browser ──▶ Next.js 14 (App Router, on Vercel)
 src/
   app/
     page.tsx              Public homepage (server component)
-    layout.tsx            Fonts, SEO metadata, JSON-LD
+    layout.tsx            SEO metadata
     sitemap.ts robots.ts  SEO
     icon.svg              Pufferfish favicon
-    admin/
-      page.tsx            Login page
-      dashboard/page.tsx  The CMS (protected by middleware)
+    admin/page.tsx        Password login
     api/
       auth/login          Sets the session cookie
       auth/logout         Clears it
       upload              Receives image uploads
-  components/
-    public/               Nav, Hero, About, Sponsors, Team, Gallery,
-                          Outreach, Contact, Footer, Pufferfish, …
-    admin/                Dashboard + one editor per content type
+  components/site/        Live page + inline editor
   lib/
     types.ts              The SiteData shape
     store.ts              Read/write data + upload images (dual-mode)
-    supabase.ts auth.ts guard.ts i18n.ts
-  middleware.ts           Protects /admin/dashboard
-  actions/site.ts         Server actions for every edit
+    supabase.ts auth.ts guard.ts
+  middleware.ts           Protects authenticated routes
+  actions/site.ts         Save the site document
 content/
   seed.json               Default content (the starting point)
 public/uploads/           Local-mode image folder
@@ -174,33 +169,32 @@ In Supabase: **Settings → API**. You need two values:
 
 ---
 
-## 5. Using the admin panel
+## 5. Using the editor
 
-Go to `/admin`, log in, and use the tabs:
+Go to `/admin`, log in, and you land back on the public page with an **Edit page** bar:
 
-- **Content** — all section text. Each field has an English and a Türkçe box. There's a **Save changes** bar at the bottom; it lights up when you have unsaved edits.
-- **Team** — add members with a photo, name, role, and bio. Use ↑ / ↓ to set the order shown on the site.
-- **Sponsors** — add a logo, website, tier, and description. Logos arrange automatically; until you add any, the site shows an inviting "your logo here" placeholder. Tiers (Title Partner, Gold, …) and their perks are edited in the **Content** tab.
-- **Gallery** — upload photos and add optional captions.
-- **Logo & Brand** — upload a logo (leave it empty to use the built-in pufferfish), set the team name, and set your team number once FIRST assigns it (the site hides the number until you fill it in).
+- Click **Edit page** to turn every heading, caption, and photo into an in-place field.
+- Use ↑ / ↓ on a card to reorder team members, sponsors, gallery frames, and outreach rows.
+- **Save** (or **Ctrl/⌘S**) writes the JSON document to disk or Supabase. **Sign out** clears the session cookie.
+- On the contact section, visitors can **Copy email** without opening a mail client.
 
-Editing tips: the language switch on the public site (top-right) shows the *other* language, and remembers a visitor's choice. Saving in admin updates the live site instantly.
+Saving updates the live site immediately.
 
 ---
 
 ## 6. Customizing the look
 
 - **Colors / fonts:** `tailwind.config.ts` (navy, scarlet, paper) and `src/app/layout.tsx` (Space Grotesk + Inter).
-- **The pufferfish:** `src/components/public/Pufferfish.tsx` — pure SVG, scales to any size.
-- **Default starting content:** `content/seed.json`. (Once you're on Supabase, edits happen in the admin panel, not here.)
-- **Section order/background rhythm:** `src/components/public/Site.tsx`.
+- **The pufferfish:** `src/components/site/Pufferfish.tsx` — pure SVG, scales to any size.
+- **Default starting content:** `content/seed.json`. (Once you're on Supabase, edits happen in the inline editor, not here.)
+- **Section order/background rhythm:** `src/components/site/Site.tsx`.
 
 ---
 
 ## 7. Assumptions & limitations
 
 - **One shared admin account.** Edits are last-write-wins — fine for a small team; not designed for many simultaneous editors.
-- **The Türkçe copy is a solid first draft.** Review and polish it in the admin panel — you know the team's voice.
+- **Copy is a starting draft.** Review and polish it in the inline editor — you know the team's voice.
 - **Gallery placeholders** in the seed use sample images; replace them with real photos.
 - **Local mode is not persistent in production** — always connect Supabase before launch.
 - **Images** are capped at 6 MB each and must be image files.
