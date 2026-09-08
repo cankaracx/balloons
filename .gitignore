@@ -24,3 +24,5 @@
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# local build artifacts
