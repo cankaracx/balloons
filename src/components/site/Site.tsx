@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { EditProvider, useEdit } from "./EditCtx";
 import { EText, EImage, ItemControls, AddButton, rid, moveItem } from "./Editable";
+import MobileNav from "./MobileNav";
 import Pufferfish from "./Pufferfish";
 import type { SiteData } from "@/lib/types";
 
@@ -16,6 +17,19 @@ export default function Site({ data, canEdit }: { data: SiteData; canEdit: boole
 
 function Page() {
   const { data, mut, editMode, canEdit } = useEdit();
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const sectionIdx = useMemo(
+    () => ({
+      "#about": data.about.idx,
+      "#support": data.support.idx,
+      "#sponsors": data.sponsors.idx,
+      "#team": data.team.idx,
+      "#work": data.work.idx,
+      "#contact": data.contact.idx,
+    }),
+    [data],
+  );
 
   // scroll-reveal + nav shadow
   useEffect(() => {
@@ -48,12 +62,21 @@ function Page() {
             <span style={{ width: 30, height: 30, display: "inline-block" }}>{logo(30)}</span>
             <EText value={b.brand.name} onChange={(v) => mut((d) => (d.brand.name = v))} />
           </a>
-          <nav className="nav-mid">
+          <nav className="nav-mid" aria-label="Sections">
             {b.nav.links.map((l, i) => (
               <EText key={l.id} as="a" href={l.href} value={l.label} onChange={(v) => mut((d) => (d.nav.links[i].label = v))} />
             ))}
           </nav>
-          <a href="#support" className="btn fill" style={{ padding: "9px 16px" }}>
+          <MobileNav
+            links={b.nav.links}
+            cta={b.nav.cta}
+            sectionIdx={sectionIdx}
+            open={menuOpen}
+            onOpenChange={setMenuOpen}
+            onCtaChange={(v) => mut((d) => (d.nav.cta = v))}
+            onLinkChange={(i, v) => mut((d) => (d.nav.links[i].label = v))}
+          />
+          <a href="#support" className="btn fill nav-cta" style={{ padding: "9px 16px" }}>
             <EText value={b.nav.cta} onChange={(v) => mut((d) => (d.nav.cta = v))} />
           </a>
         </div>
