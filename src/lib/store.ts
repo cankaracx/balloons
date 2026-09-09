@@ -4,8 +4,14 @@ import path from "path";
 import seed from "../../content/seed.json";
 import type { SiteData } from "./types";
 import { getSupabase, SUPABASE_BUCKET } from "./supabase";
+import { migrateSiteData, needsMigration } from "./i18n";
 
 const SEED = seed as unknown as SiteData;
+
+function normalizeData(raw: unknown): SiteData {
+  const base = needsMigration(raw) ? migrateSiteData(raw, SEED) : (raw as SiteData);
+  return structuredClone(base);
+}
 
 // ── Local JSON store paths (used only when Supabase is not configured) ──
 const DATA_DIR = path.join(process.cwd(), "content");
@@ -30,13 +36,13 @@ export async function loadData(): Promise<SiteData> {
         await sb.from("site").insert({ id: 1, data: SEED });
         return structuredClone(SEED);
       }
-      return data.data as SiteData;
+      return normalizeData(data.data);
     }
 
     // Local JSON mode
     try {
       const raw = await fs.readFile(DB_FILE, "utf8");
-      return JSON.parse(raw) as SiteData;
+      return normalizeData(JSON.parse(raw));
     } catch {
       await fs.mkdir(DATA_DIR, { recursive: true });
       await fs.writeFile(DB_FILE, JSON.stringify(SEED, null, 2), "utf8");
