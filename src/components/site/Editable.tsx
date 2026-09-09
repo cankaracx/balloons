@@ -2,11 +2,50 @@
 
 import { useRef, type ReactNode } from "react";
 import { useEdit } from "./EditCtx";
+import { useLocale } from "./LocaleCtx";
+import { pick } from "@/lib/i18n";
+import type { Localized } from "@/lib/types";
 
 type Tag = "span" | "div" | "p" | "h1" | "h2" | "h3" | "a";
 
-/** Inline click-to-edit text. Edits commit on blur. */
-export function EText({
+function LocalizedField({
+  label,
+  text,
+  onBlur,
+  multiline,
+}: {
+  label: string;
+  text: string;
+  onBlur: (next: string) => void;
+  multiline?: boolean;
+}) {
+  return (
+    <div className="loc-field">
+      <span className="loc-tag">{label}</span>
+      <div
+        data-edit
+        contentEditable
+        suppressContentEditableWarning
+        className={multiline ? "loc-multiline" : undefined}
+        onBlur={(e) => {
+          const txt = e.currentTarget.innerText.replace(/\n+$/g, "");
+          if (txt !== text) onBlur(txt);
+        }}
+        onKeyDown={(e) => {
+          if (!multiline && e.key === "Enter") {
+            e.preventDefault();
+            (e.target as HTMLElement).blur();
+          }
+        }}
+      >
+        {text}
+      </div>
+    </div>
+  );
+}
+
+/** Language-independent inline text (brand name, wordmark). */
+export function EPlain({
   value,
   onChange,
   as = "span",
@@ -22,13 +61,11 @@ export function EText({
   style?: React.CSSProperties;
 }) {
   const { editMode } = useEdit();
-  const ref = useRef<HTMLElement>(null);
   const Tag = as as any;
 
   if (editMode) {
     return (
       <Tag
-        ref={ref}
         data-edit
         contentEditable
         suppressContentEditableWarning
@@ -49,7 +86,7 @@ export function EText({
       </Tag>
     );
   }
-  // view mode
+
   if (as === "a") {
     return (
       <Tag href={href} className={className} style={style}>
@@ -57,10 +94,63 @@ export function EText({
       </Tag>
     );
   }
+
   return (
     <Tag className={className} style={style}>
       {value}
     </Tag>
+  );
+}
+
+/** Inline click-to-edit text. Edits commit on blur. */
+export function EText({
+  value,
+  onChange,
+  as = "span",
+  className,
+  href,
+  style,
+}: {
+  value: Localized;
+  onChange: (v: Localized) => void;
+  as?: Tag;
+  className?: string;
+  href?: string;
+  style?: React.CSSProperties;
+}) {
+  const { editMode } = useEdit();
+  const { locale } = useLocale();
+  const Tag = as as keyof JSX.IntrinsicElements;
+  const shown = pick(value, locale);
+  const multiline = as === "p" || as === "div";
+
+  if (editMode) {
+    const patch = (key: "en" | "tr", next: string) => {
+      if (next === value[key]) return;
+      onChange({ ...value, [key]: next });
+    };
+
+    return (
+      <div className={`loc-edit${className ? ` ${className}` : ""}`} style={style}>
+        <LocalizedField label="EN" text={value.en} onBlur={(next) => patch("en", next)} multiline={multiline} />
+        <LocalizedField label="TR" text={value.tr} onBlur={(next) => patch("tr", next)} multiline={multiline} />
+      </div>
+    );
+  }
+
+  if (as === "a") {
+    return (
+      <a href={href} className={className} style={style}>
+        {shown}
+      </a>
+    );
+  }
+
+  const Comp = Tag;
+  return (
+    <Comp className={className} style={style}>
+      {shown}
+    </Comp>
   );
 }
 
@@ -74,16 +164,18 @@ export function EImage({
 }: {
   url: string | null;
   onChange: (url: string) => void;
-  alt?: string;
+  alt?: string | Localized;
   className?: string;
   fallback?: ReactNode;
 }) {
   const { editMode, upload } = useEdit();
+  const { locale } = useLocale();
   const inputRef = useRef<HTMLInputElement>(null);
+  const altText = typeof alt === "string" ? alt : pick(alt, locale);
 
   const img = url ? (
     // eslint-disable-next-line @next/next/no-img-element
-    <img src={url} alt={alt} className={className} />
+    <img src={url} alt={altText} className={className} />
   ) : (
     fallback ?? null
   );

@@ -2,8 +2,10 @@
 
 import { useEffect, useId, useRef } from "react";
 import { EText } from "./Editable";
+import LangSwitch from "./LangSwitch";
+import type { Localized } from "@/lib/types";
 
-type NavLink = { id: string; label: string; href: string };
+type NavLink = { id: string; label: Localized; href: string };
 
 export default function MobileNav({
   links,
@@ -15,12 +17,12 @@ export default function MobileNav({
   onLinkChange,
 }: {
   links: NavLink[];
-  cta: string;
+  cta: Localized;
   sectionIdx: Record<string, string>;
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onCtaChange: (v: string) => void;
-  onLinkChange: (index: number, v: string) => void;
+  onCtaChange: (v: Localized) => void;
+  onLinkChange: (index: number, v: Localized) => void;
 }) {
   const panelId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -72,6 +74,9 @@ export default function MobileNav({
               </li>
             ))}
           </ul>
+          <div className="nav-drawer-lang">
+            <LangSwitch />
+          </div>
           <a href="#support" className="btn fill nav-drawer-cta" onClick={() => onOpenChange(false)}>
             <EText value={cta} onChange={onCtaChange} />
           </a>
