@@ -2,116 +2,235 @@
   "brand": { "name": "BALLOONS", "logoUrl": null },
   "nav": {
     "links": [
-      { "id": "n1", "label": "About", "href": "#about" },
-      { "id": "n2", "label": "Support", "href": "#support" },
-      { "id": "n3", "label": "Sponsors", "href": "#sponsors" },
-      { "id": "n4", "label": "Team", "href": "#team" },
-      { "id": "n5", "label": "Workshop", "href": "#work" },
-      { "id": "n6", "label": "Contact", "href": "#contact" }
+      { "id": "n1", "label": { "en": "About", "tr": "Hakkımızda" }, "href": "#about" },
+      { "id": "n2", "label": { "en": "Support", "tr": "Destek" }, "href": "#support" },
+      { "id": "n3", "label": { "en": "Sponsors", "tr": "Sponsorlar" }, "href": "#sponsors" },
+      { "id": "n4", "label": { "en": "Team", "tr": "Takım" }, "href": "#team" },
+      { "id": "n5", "label": { "en": "Workshop", "tr": "Atölye" }, "href": "#work" },
+      { "id": "n6", "label": { "en": "Outreach", "tr": "Sosyal Etki" }, "href": "#outreach" },
+      { "id": "n7", "label": { "en": "Contact", "tr": "İletişim" }, "href": "#contact" }
     ],
-    "cta": "Become a sponsor"
+    "cta": { "en": "Become a sponsor", "tr": "Sponsor olun" }
   },
   "hero": {
-    "eyebrow": "FRC Robotics — Antalya, Türkiye",
+    "eyebrow": {
+      "en": "FRC Robotics — Antalya, Türkiye",
+      "tr": "FRC Robotik — Antalya, Türkiye"
+    },
     "title": "BALLOONS",
-    "sub": "A rookie FIRST Robotics Competition team that punches above its weight. Small by design — built to expand.",
-    "ctaPrimary": "Become a sponsor",
-    "ctaSecondary": "See the team"
+    "sub": {
+      "en": "A rookie FIRST Robotics Competition team that punches above its weight. Small by design — built to expand.",
+      "tr": "Ağırlığına göre çok daha güçlü bir çaylak FIRST Robotics Competition takımı. Tasarım gereği küçük — büyümek için kuruldu."
+    },
+    "ctaPrimary": { "en": "Become a sponsor", "tr": "Sponsor olun" },
+    "ctaSecondary": { "en": "See the team", "tr": "Takımı görün" }
   },
   "marquee": {
-    "items": ["FIRST Robotics", "Build Season 2026", "Rookie Year", "TED Antalya Koleji", "Design", "Fabricate", "Compete"]
+    "items": [
+      { "en": "FIRST Robotics", "tr": "FIRST Robotik" },
+      { "en": "Build Season 2026", "tr": "İnşa Sezonu 2026" },
+      { "en": "Rookie Year", "tr": "Çaylak Yıl" },
+      { "en": "TED Antalya Koleji", "tr": "TED Antalya Koleji" },
+      { "en": "Design", "tr": "Tasarım" },
+      { "en": "Fabricate", "tr": "Üretim" },
+      { "en": "Compete", "tr": "Yarış" }
+    ]
   },
   "about": {
     "idx": "01",
-    "label": "About",
-    "headingLead": "Thirty students",
-    "headingRest": " learning to build a competition robot from nothing.",
-    "body": "BALLOONS is the rookie FRC team at TED Antalya Koleji. Every season we design, machine, wire, and code a robot from a blank sheet — and we're looking for partners to help us build the very first one. Like our namesake, we're small for now, and built to expand far beyond our size.",
+    "label": { "en": "About", "tr": "Hakkımızda" },
+    "headingLead": {
+      "en": "Thirty students",
+      "tr": "Otuz öğrenci"
+    },
+    "headingRest": {
+      "en": " learning to build a competition robot from nothing.",
+      "tr": ", sıfırdan bir yarışma robotu inşa etmeyi öğreniyor."
+    },
+    "body": {
+      "en": "BALLOONS is the rookie FRC team at TED Antalya Koleji. Every season we design, machine, wire, and code a robot from a blank sheet — and we're looking for partners to help us build the very first one. Like our namesake, we're small for now, and built to expand far beyond our size.",
+      "tr": "BALLOONS, TED Antalya Koleji'nin çaylak FRC takımıdır. Her sezon boş bir sayfadan başlayarak bir robot tasarlıyor, üretiyor, kabloluyor ve kodluyoruz — ve ilk robotumuzu birlikte inşa edecek ortaklar arıyoruz. İsmimizden esinlenildiği gibi şimdilik küçüğüz, ama boyutumuzun çok ötesine büyümek için kurulduk."
+    },
     "stats": [
-      { "id": "s1", "n": "30", "d": "Builders on the team" },
-      { "id": "s2", "n": "2026", "d": "Our first FRC season" },
-      { "id": "s3", "n": "∞", "d": "Appetite to compete" }
+      { "id": "s1", "n": "30", "d": { "en": "Builders on the team", "tr": "Takımdaki üretici" } },
+      { "id": "s2", "n": "2026", "d": { "en": "Our first FRC season", "tr": "İlk FRC sezonumuz" } },
+      { "id": "s3", "n": "∞", "d": { "en": "Appetite to compete", "tr": "Yarışma hırsı" } }
     ]
   },
   "support": {
     "idx": "02",
-    "label": "Support",
-    "headingPre": "What your partnership ",
-    "headingUnderline": "builds.",
-    "body": "Backing a rookie team is the highest-visibility, lowest-cost partnership in our season. Your support buys parts, tools, and travel — and in return your name travels with us everywhere we go.",
+    "label": { "en": "Support", "tr": "Destek" },
+    "headingPre": { "en": "What your partnership ", "tr": "Ortaklığınızın " },
+    "headingUnderline": { "en": "builds.", "tr": "inşa ettiği." },
+    "body": {
+      "en": "Backing a rookie team is the highest-visibility, lowest-cost partnership in our season. Your support buys parts, tools, and travel — and in return your name travels with us everywhere we go.",
+      "tr": "Bir çaylak takımı desteklemek, sezonumuzdaki en görünür ve en uygun maliyetli ortaklıktır. Desteğiniz parça, takım ve seyahat satın alır — karşılığında adınız gittiğimiz her yerde bizimle birlikte olur."
+    },
     "cells": [
-      { "id": "c1", "key": "A", "title": "On the robot", "body": "Your logo rides on the robot, the pit, and the team's apparel — seen by every team, judge, and spectator at competition." },
-      { "id": "c2", "key": "B", "title": "Named partner", "body": "A credited partnership across our website and social channels, with the recognition that comes from believing in a team first." },
-      { "id": "c3", "key": "C", "title": "Workshop visit", "body": "A live demo and behind-the-scenes look for your organization — a real STEM story you can share with your own people." },
-      { "id": "c4", "key": "D", "title": "A front-row seat", "body": "You watch a rookie team's entire first season unfold, from empty workshop to the moment the robot drives." }
+      {
+        "id": "c1",
+        "key": "A",
+        "title": { "en": "On the robot", "tr": "Robot üzerinde" },
+        "body": {
+          "en": "Your logo rides on the robot, the pit, and the team's apparel — seen by every team, judge, and spectator at competition.",
+          "tr": "Logonuz robot, pit alanı ve takım kıyafetlerinde yer alır — yarışmada her takım, jüri ve seyirci tarafından görülür."
+        }
+      },
+      {
+        "id": "c2",
+        "key": "B",
+        "title": { "en": "Named partner", "tr": "İsimli ortak" },
+        "body": {
+          "en": "A credited partnership across our website and social channels, with the recognition that comes from believing in a team first.",
+          "tr": "Web sitemiz ve sosyal medya kanallarımızda yer alan, bir takıma ilk inananlara özgü tanınırlık."
+        }
+      },
+      {
+        "id": "c3",
+        "key": "C",
+        "title": { "en": "Workshop visit", "tr": "Atölye ziyareti" },
+        "body": {
+          "en": "A live demo and behind-the-scenes look for your organization — a real STEM story you can share with your own people.",
+          "tr": "Kurumunuz için canlı demo ve perde arkasını gösteren bir ziyaret — kendi ekibinizle paylaşabileceğiniz gerçek bir STEM hikâyesi."
+        }
+      },
+      {
+        "id": "c4",
+        "key": "D",
+        "title": { "en": "A front-row seat", "tr": "Ön sıra koltuğu" },
+        "body": {
+          "en": "You watch a rookie team's entire first season unfold, from empty workshop to the moment the robot drives.",
+          "tr": "Boş atölyeden robotun ilk sürüşüne kadar bir çaylak takımın tüm ilk sezonunu birlikte izlersiniz."
+        }
+      }
     ],
-    "cta": "Start a conversation"
+    "cta": { "en": "Start a conversation", "tr": "Konuşmaya başlayın" }
   },
   "sponsors": {
     "idx": "03",
-    "label": "Sponsors",
-    "headingPre": "The wall is ",
-    "headingUnderline": "empty — for now.",
-    "body": "We haven't signed a sponsor yet. That means the first names on board don't just join the season — they define it. Claim a space before anyone else does.",
+    "label": { "en": "Sponsors", "tr": "Sponsorlar" },
+    "headingPre": { "en": "The wall is ", "tr": "Duvar şimdilik " },
+    "headingUnderline": { "en": "empty — for now.", "tr": "boş." },
+    "body": {
+      "en": "We haven't signed a sponsor yet. That means the first names on board don't just join the season — they define it. Claim a space before anyone else does.",
+      "tr": "Henüz bir sponsor anlaşmamız yok. Bu, ilk isimlerin sadece sezona katılmadığı — sezonu tanımladığı anlamına gelir. Başkasından önce bir yer kapın."
+    },
     "items": [
-      { "id": "sp1", "name": "Your logo here", "logoUrl": null },
-      { "id": "sp2", "name": "Your logo here", "logoUrl": null },
-      { "id": "sp3", "name": "Your logo here", "logoUrl": null },
-      { "id": "sp4", "name": "Your logo here", "logoUrl": null },
-      { "id": "sp5", "name": "Your logo here", "logoUrl": null },
-      { "id": "sp6", "name": "Your logo here", "logoUrl": null },
-      { "id": "sp7", "name": "Your logo here", "logoUrl": null },
-      { "id": "sp8", "name": "Your logo here", "logoUrl": null }
+      { "id": "sp1", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
+      { "id": "sp2", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
+      { "id": "sp3", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
+      { "id": "sp4", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
+      { "id": "sp5", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
+      { "id": "sp6", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
+      { "id": "sp7", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
+      { "id": "sp8", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null }
     ]
   },
   "team": {
     "idx": "04",
-    "label": "Team",
-    "headingPre": "The people behind the ",
-    "headingUnderline": "build.",
+    "label": { "en": "Team", "tr": "Takım" },
+    "headingPre": { "en": "The people behind the ", "tr": "İnşanın arkasındaki " },
+    "headingUnderline": { "en": "build.", "tr": "ekip." },
     "members": [
-      { "id": "m1", "initials": "CK", "name": "Can", "role": "Captain", "body": "Leads the team and its most technical work — from mechanism design to drive code.", "photoUrl": null },
-      { "id": "m2", "initials": "+", "name": "Open seat", "role": "Mechanical Lead", "body": "Owns the chassis, mechanisms, and everything that physically moves on the robot.", "photoUrl": null },
-      { "id": "m3", "initials": "+", "name": "Open seat", "role": "Programming Lead", "body": "Writes the code that turns a static design into a robot that thinks and responds.", "photoUrl": null }
+      {
+        "id": "m1",
+        "initials": "CK",
+        "name": { "en": "Can", "tr": "Can" },
+        "role": { "en": "Captain", "tr": "Kaptan" },
+        "body": {
+          "en": "Leads the team and its most technical work — from mechanism design to drive code.",
+          "tr": "Takımı ve en teknik işleri yönetir — mekanizma tasarımından sürüş koduna."
+        },
+        "photoUrl": null
+      },
+      {
+        "id": "m2",
+        "initials": "+",
+        "name": { "en": "Open seat", "tr": "Açık pozisyon" },
+        "role": { "en": "Mechanical Lead", "tr": "Mekanik Lideri" },
+        "body": {
+          "en": "Owns the chassis, mechanisms, and everything that physically moves on the robot.",
+          "tr": "Şasi, mekanizmalar ve robotta fiziksel olarak hareket eden her şeyin sorumlusu."
+        },
+        "photoUrl": null
+      },
+      {
+        "id": "m3",
+        "initials": "+",
+        "name": { "en": "Open seat", "tr": "Açık pozisyon" },
+        "role": { "en": "Programming Lead", "tr": "Yazılım Lideri" },
+        "body": {
+          "en": "Writes the code that turns a static design into a robot that thinks and responds.",
+          "tr": "Statik bir tasarımı düşünen ve tepki veren bir robota dönüştüren kodu yazar."
+        },
+        "photoUrl": null
+      }
     ]
   },
   "work": {
     "idx": "05",
-    "label": "Workshop",
-    "headingPre": "From sketch to ",
-    "headingUnderline": "mechanism.",
+    "label": { "en": "Workshop", "tr": "Atölye" },
+    "headingPre": { "en": "From sketch to ", "tr": "Eskizden " },
+    "headingUnderline": { "en": "mechanism.", "tr": "mekanizmaya." },
     "frames": [
-      { "id": "f1", "caption": "Build season", "photoUrl": null, "span": "a" },
-      { "id": "f2", "caption": "Workshop", "photoUrl": null, "span": "b" },
-      { "id": "f3", "caption": "Prototype", "photoUrl": null, "span": "c" },
-      { "id": "f4", "caption": "Wiring", "photoUrl": null, "span": "" },
-      { "id": "f5", "caption": "Drive test", "photoUrl": null, "span": "" }
+      { "id": "f1", "caption": { "en": "Build season", "tr": "İnşa sezonu" }, "photoUrl": null, "span": "a" },
+      { "id": "f2", "caption": { "en": "Workshop", "tr": "Atölye" }, "photoUrl": null, "span": "b" },
+      { "id": "f3", "caption": { "en": "Prototype", "tr": "Prototip" }, "photoUrl": null, "span": "c" },
+      { "id": "f4", "caption": { "en": "Wiring", "tr": "Kablolama" }, "photoUrl": null, "span": "" },
+      { "id": "f5", "caption": { "en": "Drive test", "tr": "Sürüş testi" }, "photoUrl": null, "span": "" }
     ]
   },
   "outreach": {
     "idx": "06",
-    "label": "Outreach",
-    "headingPre": "Robotics is bigger than ",
-    "headingUnderline": "one team.",
+    "label": { "en": "Outreach", "tr": "Sosyal Etki" },
+    "headingPre": { "en": "Robotics is bigger than ", "tr": "Robotik, " },
+    "headingUnderline": { "en": "one team.", "tr": "bir takımdan büyük." },
     "rows": [
-      { "id": "o1", "num": "001", "title": "STEM workshops", "body": "Hands-on sessions that introduce younger students to engineering before they think it's not for them." },
-      { "id": "o2", "num": "002", "title": "Open build days", "body": "We open the workshop so anyone can watch a competition robot actually come together." },
-      { "id": "o3", "num": "003", "title": "Rookie mentorship", "body": "Sharing everything we learn the hard way with the next teams starting from zero." }
+      {
+        "id": "o1",
+        "num": "001",
+        "title": { "en": "STEM workshops", "tr": "STEM atölyeleri" },
+        "body": {
+          "en": "Hands-on sessions that introduce younger students to engineering before they think it's not for them.",
+          "tr": "Genç öğrencilere mühendisliğin kendileri için de olduğunu, henüz vazgeçmeden önce gösteren uygulamalı oturumlar."
+        }
+      },
+      {
+        "id": "o2",
+        "num": "002",
+        "title": { "en": "Open build days", "tr": "Açık inşa günleri" },
+        "body": {
+          "en": "We open the workshop so anyone can watch a competition robot actually come together.",
+          "tr": "Atölyeyi açıyoruz; herkes bir yarışma robotunun gerçekten nasıl bir araya geldiğini izleyebilsin diye."
+        }
+      },
+      {
+        "id": "o3",
+        "num": "003",
+        "title": { "en": "Rookie mentorship", "tr": "Çaylak mentorluğu" },
+        "body": {
+          "en": "Sharing everything we learn the hard way with the next teams starting from zero.",
+          "tr": "Sıfırdan başlayan sonraki takımlarla, zor yoldan öğrendiklerimizi paylaşıyoruz."
+        }
+      }
     ]
   },
   "contact": {
     "idx": "07",
-    "label": "Contact",
-    "headingPre": "Let's build something ",
-    "headingUnderline": "together.",
+    "label": { "en": "Contact", "tr": "İletişim" },
+    "headingPre": { "en": "Let's build something ", "tr": "Birlikte bir şeyler " },
+    "headingUnderline": { "en": "together.", "tr": "inşa edelim." },
     "email": "balloons@tedantalya.k12.tr",
     "details": [
-      { "id": "d1", "k": "Location", "v": "Antalya, Türkiye" },
-      { "id": "d2", "k": "Instagram", "v": "@balloons.frc" },
-      { "id": "d3", "k": "School", "v": "TED Antalya Koleji" }
+      { "id": "d1", "k": { "en": "Location", "tr": "Konum" }, "v": { "en": "Antalya, Türkiye", "tr": "Antalya, Türkiye" } },
+      { "id": "d2", "k": { "en": "Instagram", "tr": "Instagram" }, "v": { "en": "@balloons.frc", "tr": "@balloons.frc" } },
+      { "id": "d3", "k": { "en": "School", "tr": "Okul" }, "v": { "en": "TED Antalya Koleji", "tr": "TED Antalya Koleji" } }
     ]
   },
   "footer": {
-    "blurb": "Rookie FRC team at TED Antalya Koleji — building our future one mechanism, one idea, and one bold dream at a time."
+    "blurb": {
+      "en": "Rookie FRC team at TED Antalya Koleji — building our future one mechanism, one idea, and one bold dream at a time.",
+      "tr": "TED Antalya Koleji'nde çaylak FRC takımı — geleceğimizi her seferinde bir mekanizma, bir fikir ve bir cesur hayalle inşa ediyoruz."
+    }
   }
 }

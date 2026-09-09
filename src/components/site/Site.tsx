@@ -2,16 +2,22 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { EditProvider, useEdit } from "./EditCtx";
-import { EText, EImage, ItemControls, AddButton, rid, moveItem } from "./Editable";
+import { LocaleProvider } from "./LocaleCtx";
+import { EText, EPlain, EImage, ItemControls, AddButton, rid, moveItem } from "./Editable";
+import LangSwitch from "./LangSwitch";
 import MobileNav from "./MobileNav";
 import Pufferfish from "./Pufferfish";
-import type { SiteData } from "@/lib/types";
+import { loc, pick } from "@/lib/i18n";
+import { useLocale } from "./LocaleCtx";
+import type { Localized, SiteData } from "@/lib/types";
 
 export default function Site({ data, canEdit }: { data: SiteData; canEdit: boolean }) {
   return (
-    <EditProvider initial={data} canEdit={canEdit}>
-      <Page />
-    </EditProvider>
+    <LocaleProvider>
+      <EditProvider initial={data} canEdit={canEdit}>
+        <Page />
+      </EditProvider>
+    </LocaleProvider>
   );
 }
 
@@ -26,6 +32,7 @@ function Page() {
       "#sponsors": data.sponsors.idx,
       "#team": data.team.idx,
       "#work": data.work.idx,
+      "#outreach": data.outreach.idx,
       "#contact": data.contact.idx,
     }),
     [data],
@@ -60,13 +67,14 @@ function Page() {
         <div className="nav">
           <a href="#top" className="logo">
             <span style={{ width: 30, height: 30, display: "inline-block" }}>{logo(30)}</span>
-            <EText value={b.brand.name} onChange={(v) => mut((d) => (d.brand.name = v))} />
+            <EPlain value={b.brand.name} onChange={(v) => mut((d) => (d.brand.name = v))} />
           </a>
           <nav className="nav-mid" aria-label="Sections">
             {b.nav.links.map((l, i) => (
               <EText key={l.id} as="a" href={l.href} value={l.label} onChange={(v) => mut((d) => (d.nav.links[i].label = v))} />
             ))}
           </nav>
+          <LangSwitch />
           <MobileNav
             links={b.nav.links}
             cta={b.nav.cta}
@@ -88,7 +96,7 @@ function Page() {
           <div className="hero-grid">
             <div>
               <EText className="mono rv" style={{ color: "var(--accent)" }} value={b.hero.eyebrow} onChange={(v) => mut((d) => (d.hero.eyebrow = v))} as="div" />
-              <EText as="h1" className="rv" style={{ transitionDelay: ".05s" }} value={b.hero.title} onChange={(v) => mut((d) => (d.hero.title = v))} />
+              <EPlain as="h1" className="rv" style={{ transitionDelay: ".05s" }} value={b.hero.title} onChange={(v) => mut((d) => (d.hero.title = v))} />
               <EText as="p" className="body sub rv" style={{ transitionDelay: ".12s" }} value={b.hero.sub} onChange={(v) => mut((d) => (d.hero.sub = v))} />
               <div className="cta rv" style={{ transitionDelay: ".2s" }}>
                 <a href="#support" className="btn fill"><EText value={b.hero.ctaPrimary} onChange={(v) => mut((d) => (d.hero.ctaPrimary = v))} /> <span className="ar">→</span></a>
@@ -122,12 +130,12 @@ function Page() {
             {b.about.stats.map((s, i) => (
               <div className="stat rv editable-item" key={s.id} style={{ transitionDelay: `${i * 0.08}s` }}>
                 <ItemControls onDelete={() => mut((d) => d.about.stats.splice(i, 1))} />
-                <EText as="div" className="n" value={s.n} onChange={(v) => mut((d) => (d.about.stats[i].n = v))} />
+                <EPlain as="div" className="n" value={s.n} onChange={(v) => mut((d) => (d.about.stats[i].n = v))} />
                 <EText as="div" className="d" value={s.d} onChange={(v) => mut((d) => (d.about.stats[i].d = v))} />
               </div>
             ))}
           </div>
-          <AddButton label="Add stat" onClick={() => mut((d) => d.about.stats.push({ id: rid(), n: "0", d: "New stat" }))} />
+          <AddButton label="Add stat" onClick={() => mut((d) => d.about.stats.push({ id: rid(), n: "0", d: loc("New stat", "Yeni istatistik") }))} />
         </div>
       </section>
 
@@ -142,13 +150,13 @@ function Page() {
             {b.support.cells.map((c, i) => (
               <div className="cell rv editable-item" key={c.id} style={{ transitionDelay: `${i * 0.08}s` }}>
                 <ItemControls onUp={() => mut((d) => moveItem(d.support.cells, i, -1))} onDown={() => mut((d) => moveItem(d.support.cells, i, 1))} onDelete={() => mut((d) => d.support.cells.splice(i, 1))} />
-                <EText as="div" className="k" value={c.key} onChange={(v) => mut((d) => (d.support.cells[i].key = v))} />
+                <EPlain as="div" className="k" value={c.key} onChange={(v) => mut((d) => (d.support.cells[i].key = v))} />
                 <EText as="h3" value={c.title} onChange={(v) => mut((d) => (d.support.cells[i].title = v))} />
                 <EText as="p" value={c.body} onChange={(v) => mut((d) => (d.support.cells[i].body = v))} />
               </div>
             ))}
           </div>
-          <AddButton label="Add benefit" onClick={() => mut((d) => d.support.cells.push({ id: rid(), key: "E", title: "New benefit", body: "Describe it." }))} />
+          <AddButton label="Add benefit" onClick={() => mut((d) => d.support.cells.push({ id: rid(), key: "E", title: loc("New benefit", "Yeni avantaj"), body: loc("Describe it.", "Açıklayın.") }))} />
           <div className="rv" style={{ marginTop: 46 }}>
             <a href="#contact" className="btn fill"><EText value={b.support.cta} onChange={(v) => mut((d) => (d.support.cta = v))} /> <span className="ar">→</span></a>
           </div>
@@ -170,7 +178,7 @@ function Page() {
               </div>
             ))}
           </div>
-          <AddButton label="Add sponsor slot" onClick={() => mut((d) => d.sponsors.items.push({ id: rid(), name: "Your logo here", logoUrl: null }))} />
+          <AddButton label="Add sponsor slot" onClick={() => mut((d) => d.sponsors.items.push({ id: rid(), name: loc("Your logo here", "Logonuz burada"), logoUrl: null }))} />
         </div>
       </section>
 
@@ -185,7 +193,7 @@ function Page() {
               <div className="person rv editable-item" key={m.id} style={{ transitionDelay: `${(i % 3) * 0.08}s` }}>
                 <ItemControls onUp={() => mut((d) => moveItem(d.team.members, i, -1))} onDown={() => mut((d) => moveItem(d.team.members, i, 1))} onDelete={() => mut((d) => d.team.members.splice(i, 1))} />
                 <span className="mono-av">
-                  <EImage url={m.photoUrl} alt={m.name} onChange={(url) => mut((d) => (d.team.members[i].photoUrl = url))} fallback={<EText value={m.initials} onChange={(v) => mut((d) => (d.team.members[i].initials = v))} />} />
+                  <EImage url={m.photoUrl} alt={m.name} onChange={(url) => mut((d) => (d.team.members[i].photoUrl = url))} fallback={<EPlain value={m.initials} onChange={(v) => mut((d) => (d.team.members[i].initials = v))} />} />
                 </span>
                 <EText as="h3" value={m.name} onChange={(v) => mut((d) => (d.team.members[i].name = v))} />
                 <EText as="div" className="role" value={m.role} onChange={(v) => mut((d) => (d.team.members[i].role = v))} />
@@ -193,7 +201,7 @@ function Page() {
               </div>
             ))}
           </div>
-          <AddButton label="Add team member" onClick={() => mut((d) => d.team.members.push({ id: rid(), initials: "+", name: "New member", role: "Role", body: "Short bio.", photoUrl: null }))} />
+          <AddButton label="Add team member" onClick={() => mut((d) => d.team.members.push({ id: rid(), initials: "+", name: loc("New member", "Yeni üye"), role: loc("Role", "Rol"), body: loc("Short bio.", "Kısa biyografi."), photoUrl: null }))} />
         </div>
       </section>
 
@@ -212,7 +220,7 @@ function Page() {
               </div>
             ))}
           </div>
-          <AddButton label="Add photo frame" onClick={() => mut((d) => d.work.frames.push({ id: rid(), caption: "New", photoUrl: null, span: "" }))} />
+          <AddButton label="Add photo frame" onClick={() => mut((d) => d.work.frames.push({ id: rid(), caption: loc("New", "Yeni"), photoUrl: null, span: "" }))} />
         </div>
       </section>
 
@@ -226,7 +234,7 @@ function Page() {
             {b.outreach.rows.map((r, i) => (
               <div className="orow rv editable-item" key={r.id} style={{ transitionDelay: `${i * 0.08}s` }}>
                 <ItemControls onUp={() => mut((d) => moveItem(d.outreach.rows, i, -1))} onDown={() => mut((d) => moveItem(d.outreach.rows, i, 1))} onDelete={() => mut((d) => d.outreach.rows.splice(i, 1))} />
-                <EText as="div" className="oi" value={r.num} onChange={(v) => mut((d) => (d.outreach.rows[i].num = v))} />
+                <EPlain as="div" className="oi" value={r.num} onChange={(v) => mut((d) => (d.outreach.rows[i].num = v))} />
                 <div>
                   <EText as="h3" value={r.title} onChange={(v) => mut((d) => (d.outreach.rows[i].title = v))} />
                   <EText as="p" value={r.body} onChange={(v) => mut((d) => (d.outreach.rows[i].body = v))} />
@@ -234,7 +242,7 @@ function Page() {
               </div>
             ))}
           </div>
-          <AddButton label="Add outreach item" onClick={() => mut((d) => d.outreach.rows.push({ id: rid(), num: "00" + (d.outreach.rows.length + 1), title: "New", body: "Describe it." }))} />
+          <AddButton label="Add outreach item" onClick={() => mut((d) => d.outreach.rows.push({ id: rid(), num: "00" + (d.outreach.rows.length + 1), title: loc("New", "Yeni"), body: loc("Describe it.", "Açıklayın.") }))} />
         </div>
       </section>
 
@@ -247,7 +255,7 @@ function Page() {
             <div>
               <Heading pre={b.contact.headingPre} ul={b.contact.headingUnderline} onPre={(v) => mut((d) => (d.contact.headingPre = v))} onUl={(v) => mut((d) => (d.contact.headingUnderline = v))} />
               <a href={`mailto:${b.contact.email}`} className="big-mail rv" style={{ transitionDelay: ".1s" }}>
-                <EText value={b.contact.email} onChange={(v) => mut((d) => (d.contact.email = v))} />
+                <EPlain value={b.contact.email} onChange={(v) => mut((d) => (d.contact.email = v))} />
               </a>
             </div>
             <div className="clist rv" style={{ transitionDelay: ".16s" }}>
@@ -258,7 +266,7 @@ function Page() {
                   <EText className="v" value={dl.v} onChange={(v) => mut((d) => (d.contact.details[i].v = v))} />
                 </div>
               ))}
-              <AddButton label="Add detail" onClick={() => mut((d) => d.contact.details.push({ id: rid(), k: "Label", v: "Value" }))} />
+              <AddButton label="Add detail" onClick={() => mut((d) => d.contact.details.push({ id: rid(), k: loc("Label", "Etiket"), v: loc("Value", "Değer") }))} />
             </div>
           </div>
         </div>
@@ -271,7 +279,7 @@ function Page() {
             <div>
               <div className="logo" style={{ color: "var(--bone)" }}>
                 <span style={{ width: 28, height: 28, display: "inline-block" }}>{logo(28)}</span>
-                <EText value={b.brand.name} onChange={(v) => mut((d) => (d.brand.name = v))} />
+                <EPlain value={b.brand.name} onChange={(v) => mut((d) => (d.brand.name = v))} />
               </div>
               <EText as="p" value={b.footer.blurb} onChange={(v) => mut((d) => (d.footer.blurb = v))} />
             </div>
@@ -290,16 +298,16 @@ function Page() {
   );
 }
 
-function SecHead({ idx, label, onIdx, onLabel }: { idx: string; label: string; onIdx: (v: string) => void; onLabel: (v: string) => void }) {
+function SecHead({ idx, label, onIdx, onLabel }: { idx: string; label: Localized; onIdx: (v: string) => void; onLabel: (v: Localized) => void }) {
   return (
     <div className="sec-head rv">
-      <EText className="idx" value={idx} onChange={onIdx} />
+      <EPlain className="idx" value={idx} onChange={onIdx} />
       <EText className="lbl" value={label} onChange={onLabel} />
     </div>
   );
 }
 
-function Heading({ pre, ul, onPre, onUl, max }: { pre: string; ul: string; onPre: (v: string) => void; onUl: (v: string) => void; max?: string }) {
+function Heading({ pre, ul, onPre, onUl, max }: { pre: Localized; ul: Localized; onPre: (v: Localized) => void; onUl: (v: Localized) => void; max?: string }) {
   return (
     <h2 className="t rv" style={{ marginTop: 48, maxWidth: max }}>
       <EText value={pre} onChange={onPre} />
@@ -310,6 +318,7 @@ function Heading({ pre, ul, onPre, onUl, max }: { pre: string; ul: string; onPre
 
 function Marquee() {
   const { data, mut, editMode } = useEdit();
+  const { locale } = useLocale();
   const items = data.marquee.items;
   if (editMode) {
     return (
@@ -321,7 +330,7 @@ function Marquee() {
               <EText value={it} onChange={(v) => mut((d) => (d.marquee.items[i] = v))} />
             </span>
           ))}
-          <AddButton label="Add ticker word" onClick={() => mut((d) => d.marquee.items.push("New"))} />
+          <AddButton label="Add ticker word" onClick={() => mut((d) => d.marquee.items.push(loc("New", "Yeni")))} />
         </div>
       </div>
     );
@@ -329,7 +338,7 @@ function Marquee() {
   const strip = (
     <div className="marq-in">
       {items.map((it, i) => (
-        <span key={i}>{it}<b style={{ marginLeft: 22 }}>·</b></span>
+        <span key={i}>{pick(it, locale)}<b style={{ marginLeft: 22 }}>·</b></span>
       ))}
     </div>
   );
