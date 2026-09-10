@@ -219,5 +219,6 @@ Editing tips: the language switch on the public site (top-right) shows the *othe
 Next.js is pinned to the latest patched **14.2.x** release, which includes all current security fixes for that line. `npm audit` may still report two advisories inside packages that Next.js bundles internally; clearing those would require upgrading to Next 16 (a major version with breaking changes), which isn't worth it for a stable team site. Nothing here affects a normally deployed site. If you ever want to move to Next 16 later, do it as a deliberate upgrade.
 
 ---
+pls dont copy
 
 Made for BALLOONS · TED Antalya Koleji 🐡
