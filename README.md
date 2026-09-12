@@ -121,7 +121,7 @@ Sign in at `/admin`, then use **Edit page** on the homepage.
 
 ## Look and content
 
-- Colors and type: `src/app/globals.css`, `src/app/layout.tsx`, `tailwind.config.ts`
+- Colors and type: `src/app/globals.css`
 - Starting copy: `content/seed.json`
 - After Supabase is connected, edit in the admin panel, not in `seed.json`
 

@@ -38,12 +38,12 @@
     "idx": "01",
     "label": { "en": "About", "tr": "Hakkımızda" },
     "headingLead": {
-      "en": "Thirty students.",
-      "tr": "Otuz öğrenci."
+      "en": "Thirty students, one robot, first season.",
+      "tr": "Otuz öğrenci, bir robot, ilk sezon."
     },
     "headingRest": {
-      "en": " One robot. First season.",
-      "tr": " Bir robot. İlk sezon."
+      "en": "",
+      "tr": ""
     },
     "body": {
       "en": "BALLOONS is the FRC team at TED Antalya Koleji. We machine parts, write drive code, and run the pit. This is our first season, so we are looking for partners who will fund tools, travel, and the first robot.",
@@ -58,8 +58,8 @@
   "support": {
     "idx": "02",
     "label": { "en": "Support", "tr": "Destek" },
-    "headingPre": { "en": "What support ", "tr": "Destek " },
-    "headingUnderline": { "en": "pays for.", "tr": "neye gider." },
+    "headingPre": { "en": "What support pays for", "tr": "Destek neye gider" },
+    "headingUnderline": { "en": "", "tr": "" },
     "body": {
       "en": "Parts, tools, and travel are the real costs. In return your name is on the robot, in the pit, and on this site.",
       "tr": "Gerçek maliyet parça, takım ve seyahattir. Karşılığında adınız robotta, pit'te ve bu sitede yer alır."
@@ -107,8 +107,8 @@
   "sponsors": {
     "idx": "03",
     "label": { "en": "Sponsors", "tr": "Sponsorlar" },
-    "headingPre": { "en": "No partners ", "tr": "Henüz " },
-    "headingUnderline": { "en": "signed yet.", "tr": "ortak yok." },
+    "headingPre": { "en": "No partners yet", "tr": "Henüz ortak yok" },
+    "headingUnderline": { "en": "", "tr": "" },
     "body": {
       "en": "The first names on this wall set the season. Four open slots below.",
       "tr": "Bu duvardaki ilk isimler sezonu belirler. Aşağıda dört açık yer var."
@@ -123,8 +123,8 @@
   "team": {
     "idx": "04",
     "label": { "en": "Team", "tr": "Takım" },
-    "headingPre": { "en": "Who is ", "tr": "Kim " },
-    "headingUnderline": { "en": "building it.", "tr": "inşa ediyor." },
+    "headingPre": { "en": "Who is building it", "tr": "Kim inşa ediyor" },
+    "headingUnderline": { "en": "", "tr": "" },
     "members": [
       {
         "id": "m1",
@@ -164,8 +164,8 @@
   "work": {
     "idx": "05",
     "label": { "en": "Workshop", "tr": "Atölye" },
-    "headingPre": { "en": "The shop ", "tr": "Atölye " },
-    "headingUnderline": { "en": "this season.", "tr": "bu sezon." },
+    "headingPre": { "en": "The shop this season", "tr": "Atölye bu sezon" },
+    "headingUnderline": { "en": "", "tr": "" },
     "frames": [
       { "id": "f1", "caption": { "en": "Build season", "tr": "İnşa sezonu" }, "photoUrl": null, "span": "a" },
       { "id": "f2", "caption": { "en": "Workshop", "tr": "Atölye" }, "photoUrl": null, "span": "" },
@@ -177,8 +177,8 @@
   "outreach": {
     "idx": "06",
     "label": { "en": "Outreach", "tr": "Sosyal Etki" },
-    "headingPre": { "en": "Work outside ", "tr": "Maç " },
-    "headingUnderline": { "en": "the matches.", "tr": "dışındaki iş." },
+    "headingPre": { "en": "Work outside the matches", "tr": "Maç dışındaki iş" },
+    "headingUnderline": { "en": "", "tr": "" },
     "rows": [
       {
         "id": "o1",
@@ -212,8 +212,8 @@
   "contact": {
     "idx": "07",
     "label": { "en": "Contact", "tr": "İletişim" },
-    "headingPre": { "en": "Mail the ", "tr": "Takıma " },
-    "headingUnderline": { "en": "team.", "tr": "yazın." },
+    "headingPre": { "en": "Write to the team", "tr": "Takıma yazın" },
+    "headingUnderline": { "en": "", "tr": "" },
     "email": "balloons@tedantalya.k12.tr",
     "details": [
       { "id": "d1", "k": { "en": "Location", "tr": "Konum" }, "v": { "en": "Antalya, Türkiye", "tr": "Antalya, Türkiye" } },

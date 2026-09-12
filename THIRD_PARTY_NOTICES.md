@@ -13,6 +13,5 @@ code and content only.
 | PostCSS / Autoprefixer | MIT |
 | jose | MIT |
 | @supabase/supabase-js | MIT |
-| Barlow and Barlow Condensed (Google Fonts) | OFL-1.1 |
 
 Full license texts ship with each package under `node_modules/<package>/`.

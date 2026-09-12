@@ -5,8 +5,9 @@ export type { Locale };
 /** Resolve localized copy for the active locale (falls back to English). */
 export function pick(value: Localized | undefined, locale: Locale): string {
   if (!value) return "";
-  const text = value[locale]?.trim();
-  return text || value.en || "";
+  const text = value[locale];
+  if (text != null && text.trim() !== "") return text;
+  return value.en || "";
 }
 
 export function loc(en: string, tr: string): Localized {

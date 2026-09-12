@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Pufferfish from "@/components/site/Pufferfish";
 
 export default function AdminLogin() {
   const router = useRouter();
@@ -34,35 +33,32 @@ export default function AdminLogin() {
 
   return (
     <main className="admin">
-      <div className="admin-card">
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <span style={{ width: 48, height: 48, display: "inline-block" }}>
-            <Pufferfish />
-          </span>
-        </div>
-        <h1>BALLOONS Admin</h1>
-        <p className="lead">Sign in to edit the site.</p>
-        <label className="sr-only" htmlFor="admin-password">
-          Password
-        </label>
+      <form
+        className="admin-card"
+        onSubmit={(e) => {
+          e.preventDefault();
+          submit();
+        }}
+      >
+        <h1>Edit the site</h1>
+        <p className="lead">BALLOONS admin</p>
+        <label htmlFor="admin-password">Password</label>
         <input
           id="admin-password"
           type="password"
           value={password}
           autoFocus
-          placeholder="Password"
           autoComplete="current-password"
           onChange={(e) => setPassword(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && submit()}
         />
         {error && <p className="admin-err">{error}</p>}
-        <button onClick={submit} disabled={loading} className="btn fill" style={{ marginTop: 16, width: "100%" }}>
+        <button type="submit" disabled={loading} className="btn">
           {loading ? "Signing in…" : "Sign in"}
         </button>
         <a href="/" className="admin-back">
-          Back to site
+          Back to the site
         </a>
-      </div>
+      </form>
     </main>
   );
 }
