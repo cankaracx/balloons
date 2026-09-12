@@ -54,10 +54,10 @@ export default function MobileNav({
         {open ? "Close" : "Menu"}
       </button>
 
+      {open && (
       <div
         id={panelId}
-        className={`nav-drawer${open ? " open" : ""}`}
-        aria-hidden={!open}
+        className="nav-drawer open"
       >
         <div className="nav-drawer-in">
           <ul className="nav-drawer-list">
@@ -68,7 +68,6 @@ export default function MobileNav({
                   className="nav-drawer-link"
                   onClick={() => onOpenChange(false)}
                 >
-                  <span className="nav-drawer-idx">{sectionIdx[l.href] ?? "—"}</span>
                   <EText value={l.label} onChange={(v) => onLinkChange(i, v)} />
                 </a>
               </li>
@@ -85,6 +84,7 @@ export default function MobileNav({
           </button>
         </div>
       </div>
+      )}
       {open && (
         <button
           type="button"

@@ -13,7 +13,6 @@ function normalizeData(raw: unknown): SiteData {
   return structuredClone(base);
 }
 
-// ── Local JSON store paths (used only when Supabase is not configured) ──
 const DATA_DIR = path.join(process.cwd(), "content");
 const DB_FILE = path.join(DATA_DIR, "db.json");
 const UPLOAD_DIR = path.join(process.cwd(), "public", "uploads");
@@ -22,9 +21,6 @@ function usingSupabase() {
   return getSupabase() !== null;
 }
 
-// ────────────────────────────────────────────────────────────
-//  LOAD
-// ────────────────────────────────────────────────────────────
 export async function loadData(): Promise<SiteData> {
   try {
     const sb = getSupabase();
@@ -54,9 +50,6 @@ export async function loadData(): Promise<SiteData> {
   }
 }
 
-// ────────────────────────────────────────────────────────────
-//  SAVE
-// ────────────────────────────────────────────────────────────
 export async function saveData(data: SiteData): Promise<void> {
   const sb = getSupabase();
   if (sb) {
@@ -68,9 +61,6 @@ export async function saveData(data: SiteData): Promise<void> {
   await fs.writeFile(DB_FILE, JSON.stringify(data, null, 2), "utf8");
 }
 
-// ────────────────────────────────────────────────────────────
-//  IMAGE UPLOAD  → returns a public URL string
-// ────────────────────────────────────────────────────────────
 export async function uploadImage(file: File): Promise<string> {
   const ext = (file.name.split(".").pop() || "bin").toLowerCase().replace(/[^a-z0-9]/g, "");
   const safeExt = ["png", "jpg", "jpeg", "webp", "gif", "svg"].includes(ext) ? ext : "png";
@@ -88,7 +78,6 @@ export async function uploadImage(file: File): Promise<string> {
     return data.publicUrl;
   }
 
-  // Local mode → write to /public/uploads
   await fs.mkdir(UPLOAD_DIR, { recursive: true });
   await fs.writeFile(path.join(UPLOAD_DIR, filename), bytes);
   return `/uploads/${filename}`;

@@ -2,7 +2,7 @@
   "name": "balloons-frc",
   "version": "1.0.0",
   "private": true,
-  "description": "Official website + lightweight CMS for BALLOONS, the rookie FRC robotics team of TED Antalya Koleji.",
+  "description": "Website and CMS for BALLOONS, the FRC team at TED Antalya Koleji.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
