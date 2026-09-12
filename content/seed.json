@@ -110,8 +110,8 @@
     "headingPre": { "en": "No partners yet", "tr": "Henüz ortak yok" },
     "headingUnderline": { "en": "", "tr": "" },
     "body": {
-      "en": "The first names on this wall set the season. Four open slots below.",
-      "tr": "Bu duvardaki ilk isimler sezonu belirler. Aşağıda dört açık yer var."
+      "en": "Nobody has signed yet. The first names here set the season.",
+      "tr": "Henüz kimse imzalamadı. Buradaki ilk isimler sezonu belirler."
     },
     "items": [
       { "id": "sp1", "name": { "en": "Open slot", "tr": "Açık yer" }, "logoUrl": null },
