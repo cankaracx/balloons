@@ -110,6 +110,7 @@ export function EText({
   className,
   href,
   style,
+  ...rest
 }: {
   value: Localized;
   onChange: (v: Localized) => void;
@@ -117,7 +118,7 @@ export function EText({
   className?: string;
   href?: string;
   style?: React.CSSProperties;
-}) {
+} & Record<string, unknown>) {
   const { editMode } = useEdit();
   const { locale } = useLocale();
   const Tag = as as keyof JSX.IntrinsicElements;
@@ -140,7 +141,7 @@ export function EText({
 
   if (as === "a") {
     return (
-      <a href={href} className={className} style={style}>
+      <a href={href} className={className} style={style} {...rest}>
         {shown}
       </a>
     );

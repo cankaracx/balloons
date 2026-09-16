@@ -7,6 +7,8 @@ import { EText, EPlain, EImage, ItemControls, AddButton, rid, moveItem } from ".
 import LangSwitch from "./LangSwitch";
 import MobileNav from "./MobileNav";
 import Pufferfish from "./Pufferfish";
+import GalleryLightbox from "./GalleryLightbox";
+import { useScrollSpy } from "./useScrollSpy";
 import { loc, pick } from "@/lib/i18n";
 import { useLocale } from "./LocaleCtx";
 import type { Localized, SiteData } from "@/lib/types";
@@ -21,9 +23,18 @@ export default function Site({ data, canEdit }: { data: SiteData; canEdit: boole
   );
 }
 
+const SECTION_IDS = ["top", "about", "support", "sponsors", "team", "work", "outreach", "contact"];
+
 function Page() {
   const { data, mut, editMode, canEdit } = useEdit();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const activeSection = useScrollSpy(SECTION_IDS);
+
+  const galleryFrames = useMemo(
+    () => data.work.frames.filter((f) => f.photoUrl),
+    [data.work.frames],
+  );
 
   const sectionIdx = useMemo(
     () => ({
@@ -71,7 +82,15 @@ function Page() {
           </a>
           <nav className="nav-mid" aria-label="Sections">
             {b.nav.links.map((l, i) => (
-              <EText key={l.id} as="a" href={l.href} value={l.label} onChange={(v) => mut((d) => (d.nav.links[i].label = v))} />
+              <EText
+                key={l.id}
+                as="a"
+                href={l.href}
+                className={activeSection === l.href.slice(1) ? "on" : undefined}
+                aria-current={activeSection === l.href.slice(1) ? "true" : undefined}
+                value={l.label}
+                onChange={(v) => mut((d) => (d.nav.links[i].label = v))}
+              />
             ))}
           </nav>
           <LangSwitch />
@@ -79,6 +98,7 @@ function Page() {
             links={b.nav.links}
             cta={b.nav.cta}
             sectionIdx={sectionIdx}
+            activeSection={activeSection}
             open={menuOpen}
             onOpenChange={setMenuOpen}
             onCtaChange={(v) => mut((d) => (d.nav.cta = v))}
@@ -212,13 +232,33 @@ function Page() {
           <hr className="rule rv" />
           <Heading pre={b.work.headingPre} ul={b.work.headingUnderline} onPre={(v) => mut((d) => (d.work.headingPre = v))} onUl={(v) => mut((d) => (d.work.headingUnderline = v))} />
           <div className="frames">
-            {b.work.frames.map((f, i) => (
-              <div className={`frame rv editable-item ${f.span}`} key={f.id} style={{ transitionDelay: `${(i % 4) * 0.08}s` }}>
-                <ItemControls onUp={() => mut((d) => moveItem(d.work.frames, i, -1))} onDown={() => mut((d) => moveItem(d.work.frames, i, 1))} onDelete={() => mut((d) => d.work.frames.splice(i, 1))} />
-                <EImage url={f.photoUrl} alt={f.caption} onChange={(url) => mut((d) => (d.work.frames[i].photoUrl = url))} />
-                <span className="cap"><EText value={f.caption} onChange={(v) => mut((d) => (d.work.frames[i].caption = v))} /></span>
-              </div>
-            ))}
+            {b.work.frames.map((f, i) => {
+              const galleryIdx = f.photoUrl ? galleryFrames.findIndex((g) => g.id === f.id) : -1;
+              return (
+                <div
+                  className={`frame rv editable-item ${f.span}${!editMode && f.photoUrl ? " frame-open" : ""}`}
+                  key={f.id}
+                  style={{ transitionDelay: `${(i % 4) * 0.08}s` }}
+                  role={!editMode && f.photoUrl ? "button" : undefined}
+                  tabIndex={!editMode && f.photoUrl ? 0 : undefined}
+                  onClick={!editMode && f.photoUrl && galleryIdx >= 0 ? () => setLightboxIndex(galleryIdx) : undefined}
+                  onKeyDown={
+                    !editMode && f.photoUrl && galleryIdx >= 0
+                      ? (e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            setLightboxIndex(galleryIdx);
+                          }
+                        }
+                      : undefined
+                  }
+                >
+                  <ItemControls onUp={() => mut((d) => moveItem(d.work.frames, i, -1))} onDown={() => mut((d) => moveItem(d.work.frames, i, 1))} onDelete={() => mut((d) => d.work.frames.splice(i, 1))} />
+                  <EImage url={f.photoUrl} alt={f.caption} onChange={(url) => mut((d) => (d.work.frames[i].photoUrl = url))} />
+                  <span className="cap"><EText value={f.caption} onChange={(v) => mut((d) => (d.work.frames[i].caption = v))} /></span>
+                </div>
+              );
+            })}
           </div>
           <AddButton label="Add photo frame" onClick={() => mut((d) => d.work.frames.push({ id: rid(), caption: loc("New", "Yeni"), photoUrl: null, span: "" }))} />
         </div>
@@ -294,6 +334,14 @@ function Page() {
       </footer>
 
       {canEdit && <EditBar />}
+      {lightboxIndex !== null && galleryFrames.length > 0 && (
+        <GalleryLightbox
+          frames={galleryFrames}
+          index={lightboxIndex}
+          onClose={() => setLightboxIndex(null)}
+          onMove={setLightboxIndex}
+        />
+      )}
     </>
   );
 }
@@ -352,10 +400,19 @@ function Marquee() {
 
 function EditBar() {
   const { editMode, setEditMode, save, status } = useEdit();
+
+  async function logout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    window.location.reload();
+  }
+
   return (
     <div className="editbar">
       {!editMode ? (
-        <button className="save" onClick={() => setEditMode(true)}>Edit page</button>
+        <>
+          <button className="save" onClick={() => setEditMode(true)}>Edit page</button>
+          <button className="ghost" onClick={logout}>Sign out</button>
+        </>
       ) : (
         <>
           <span className="status">{status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Error" : "Editing"}</span>
