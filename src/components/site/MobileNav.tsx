@@ -11,6 +11,7 @@ export default function MobileNav({
   links,
   cta,
   sectionIdx,
+  activeSection,
   open,
   onOpenChange,
   onCtaChange,
@@ -19,6 +20,7 @@ export default function MobileNav({
   links: NavLink[];
   cta: Localized;
   sectionIdx: Record<string, string>;
+  activeSection: string;
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onCtaChange: (v: Localized) => void;
@@ -65,7 +67,8 @@ export default function MobileNav({
               <li key={l.id}>
                 <a
                   href={l.href}
-                  className="nav-drawer-link"
+                  className={`nav-drawer-link${activeSection === l.href.slice(1) ? " on" : ""}`}
+                  aria-current={activeSection === l.href.slice(1) ? "true" : undefined}
                   onClick={() => onOpenChange(false)}
                 >
                   <span className="nav-drawer-idx">{sectionIdx[l.href] ?? "—"}</span>
