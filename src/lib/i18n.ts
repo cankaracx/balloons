@@ -138,6 +138,7 @@ function migrateSponsors(raw: unknown, seed: SiteData["sponsors"]) {
       id: String(it.id ?? seed.items[i]?.id ?? `sp${i}`),
       name: asLocalized(it.name, pick(seed.items[i]?.name, "tr")),
       logoUrl: (it.logoUrl ?? seed.items[i]?.logoUrl ?? null) as string | null,
+      websiteUrl: normalizeWebsiteUrl(it.websiteUrl ?? seed.items[i]?.websiteUrl ?? null),
     })),
   };
 }
@@ -221,6 +222,24 @@ function migrateFooter(raw: unknown, seed: SiteData["footer"]) {
 
 export function needsMigration(raw: unknown): boolean {
   if (!raw || typeof raw !== "object") return true;
-  const hero = (raw as SiteData).hero;
-  return typeof hero?.sub === "string";
+  const data = raw as SiteData;
+  if (typeof data.hero?.sub === "string") return true;
+  const sponsors = data.sponsors?.items;
+  if (Array.isArray(sponsors) && sponsors.some((s) => !("websiteUrl" in s))) return true;
+  return false;
+}
+
+/** Accept bare domains in admin; always store a usable absolute URL or null. */
+export function normalizeWebsiteUrl(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const trimmed = raw.trim();
+  if (!trimmed) return null;
+  const withProto = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  try {
+    const url = new URL(withProto);
+    if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+    return url.href;
+  } catch {
+    return null;
+  }
 }

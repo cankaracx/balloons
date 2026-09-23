@@ -9,7 +9,7 @@ import MobileNav from "./MobileNav";
 import Pufferfish from "./Pufferfish";
 import GalleryLightbox from "./GalleryLightbox";
 import { useScrollSpy } from "./useScrollSpy";
-import { loc, pick } from "@/lib/i18n";
+import { loc, normalizeWebsiteUrl, pick } from "@/lib/i18n";
 import { useLocale } from "./LocaleCtx";
 import type { Localized, SiteData } from "@/lib/types";
 
@@ -192,13 +192,10 @@ function Page() {
           <EText as="p" className="body rv" style={{ transitionDelay: ".1s", maxWidth: "56ch", marginTop: 22 }} value={b.sponsors.body} onChange={(v) => mut((d) => (d.sponsors.body = v))} />
           <div className="wall">
             {b.sponsors.items.map((s, i) => (
-              <div className="slot rv editable-item" key={s.id} style={{ transitionDelay: `${i * 0.05}s` }}>
-                <ItemControls onUp={() => mut((d) => moveItem(d.sponsors.items, i, -1))} onDown={() => mut((d) => moveItem(d.sponsors.items, i, 1))} onDelete={() => mut((d) => d.sponsors.items.splice(i, 1))} />
-                <EImage url={s.logoUrl} alt={s.name} onChange={(url) => mut((d) => (d.sponsors.items[i].logoUrl = url))} fallback={<EText value={s.name} onChange={(v) => mut((d) => (d.sponsors.items[i].name = v))} />} />
-              </div>
+              <SponsorSlot key={s.id} sponsor={s} index={i} />
             ))}
           </div>
-          <AddButton label="Add sponsor slot" onClick={() => mut((d) => d.sponsors.items.push({ id: rid(), name: loc("Your logo here", "Logonuz burada"), logoUrl: null }))} />
+          <AddButton label="Add sponsor slot" onClick={() => mut((d) => d.sponsors.items.push({ id: rid(), name: loc("Your logo here", "Logonuz burada"), logoUrl: null, websiteUrl: null }))} />
         </div>
       </section>
 
@@ -343,6 +340,51 @@ function Page() {
         />
       )}
     </>
+  );
+}
+
+function SponsorSlot({ sponsor, index }: { sponsor: SiteData["sponsors"]["items"][0]; index: number }) {
+  const { mut, editMode } = useEdit();
+  const { locale } = useLocale();
+  const name = pick(sponsor.name, locale);
+  const href = sponsor.websiteUrl;
+  const linked = !editMode && !!href && !!sponsor.logoUrl;
+
+  const inner = (
+    <>
+      <ItemControls
+        onUp={() => mut((d) => moveItem(d.sponsors.items, index, -1))}
+        onDown={() => mut((d) => moveItem(d.sponsors.items, index, 1))}
+        onDelete={() => mut((d) => d.sponsors.items.splice(index, 1))}
+      />
+      <EImage
+        url={sponsor.logoUrl}
+        alt={sponsor.name}
+        onChange={(url) => mut((d) => (d.sponsors.items[index].logoUrl = url))}
+        fallback={<EText value={sponsor.name} onChange={(v) => mut((d) => (d.sponsors.items[index].name = v))} />}
+      />
+      {editMode && (
+        <label className="slot-url">
+          <span className="slot-url-k">Website</span>
+          <EPlain
+            value={sponsor.websiteUrl ?? ""}
+            onChange={(v) => mut((d) => (d.sponsors.items[index].websiteUrl = normalizeWebsiteUrl(v)))}
+          />
+        </label>
+      )}
+    </>
+  );
+
+  return (
+    <div className={`slot rv editable-item${linked ? " slot-linked" : ""}`} style={{ transitionDelay: `${index * 0.05}s` }}>
+      {linked ? (
+        <a href={href!} className="slot-link" target="_blank" rel="noopener noreferrer" aria-label={`${name} (opens in new tab)`}>
+          {inner}
+        </a>
+      ) : (
+        inner
+      )}
+    </div>
   );
 }
 

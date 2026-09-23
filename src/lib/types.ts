@@ -38,7 +38,7 @@ export type Support = {
   cta: Localized;
 };
 
-export type Sponsor = { id: string; name: Localized; logoUrl: string | null };
+export type Sponsor = { id: string; name: Localized; logoUrl: string | null; websiteUrl: string | null };
 export type Sponsors = {
   idx: string;
   label: Localized;
