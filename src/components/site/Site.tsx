@@ -348,7 +348,7 @@ function SponsorSlot({ sponsor, index }: { sponsor: SiteData["sponsors"]["items"
   const { locale } = useLocale();
   const name = pick(sponsor.name, locale);
   const href = sponsor.websiteUrl;
-  const linked = !editMode && !!href;
+  const linked = !editMode && !!href && !!sponsor.logoUrl;
 
   const inner = (
     <>
