@@ -123,10 +123,17 @@ header.scr{border-color:var(--hair)}
 @media(max-width:760px){.ben{grid-template-columns:1fr}.ben .cell{border-right:0!important}}
 
 .wall{margin-top:52px;display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--hair);border-left:1px solid var(--hair)}
-.slot{aspect-ratio:3/2;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);display:flex;align-items:center;justify-content:center;
+.slot{aspect-ratio:3/2;border-right:1px solid var(--hair);border-bottom:1px solid var(--hair);display:flex;flex-direction:column;align-items:center;justify-content:center;
   font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft);position:relative;transition:.25s;overflow:hidden}
+.slot-link{display:flex;flex:1;width:100%;height:100%;align-items:center;justify-content:center;color:inherit;text-decoration:none}
+.slot-linked:hover,.slot-linked:focus-within{color:var(--accent);background:var(--paper)}
+.slot-linked .slot-link::after{content:"";position:absolute;top:10px;right:10px;width:7px;height:7px;border-top:1.5px solid currentColor;border-right:1.5px solid currentColor;transform:rotate(45deg);opacity:.45}
+.slot-linked:hover .slot-link::after,.slot-linked:focus-within .slot-link::after{opacity:1}
 .slot img{max-width:78%;max-height:74%;object-fit:contain}
-.slot:hover{color:var(--accent);background:var(--paper)}
+.slot:hover:not(.slot-linked){color:var(--accent);background:var(--paper)}
+.slot-url{display:grid;gap:4px;width:calc(100% - 20px);margin:10px 10px 12px;padding-top:10px;border-top:1px dashed var(--hair);font-size:11px;text-transform:none;letter-spacing:0}
+.slot-url-k{font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.slot-url [data-edit]{display:block;width:100%;padding:6px 8px;border:1px solid var(--hair);border-radius:2px;background:var(--paper);font-family:var(--mono);font-size:11px;color:var(--ink);text-transform:none;letter-spacing:0}
 @media(max-width:760px){.wall{grid-template-columns:repeat(2,1fr)}}
 
 .roster{margin-top:52px;display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--hair)}

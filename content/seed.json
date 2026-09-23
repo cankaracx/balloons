@@ -116,14 +116,14 @@
       "tr": "Henüz bir sponsor anlaşmamız yok. Bu, ilk isimlerin sadece sezona katılmadığı — sezonu tanımladığı anlamına gelir. Başkasından önce bir yer kapın."
     },
     "items": [
-      { "id": "sp1", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
-      { "id": "sp2", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
-      { "id": "sp3", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
-      { "id": "sp4", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
-      { "id": "sp5", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
-      { "id": "sp6", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
-      { "id": "sp7", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null },
-      { "id": "sp8", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null }
+      { "id": "sp1", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null, "websiteUrl": null },
+      { "id": "sp2", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null, "websiteUrl": null },
+      { "id": "sp3", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null, "websiteUrl": null },
+      { "id": "sp4", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null, "websiteUrl": null },
+      { "id": "sp5", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null, "websiteUrl": null },
+      { "id": "sp6", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null, "websiteUrl": null },
+      { "id": "sp7", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null, "websiteUrl": null },
+      { "id": "sp8", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null, "websiteUrl": null }
     ]
   },
   "team": {
