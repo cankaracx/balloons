@@ -42,6 +42,7 @@ export function migrateSiteData(raw: unknown, seed: SiteData): SiteData {
   const d = structuredClone(raw) as Record<string, unknown>;
   const s = seed;
 
+  d.brand = migrateBrand(d.brand, s.brand);
   d.nav = migrateNav(d.nav, s.nav);
   d.hero = migrateHero(d.hero, s.hero);
   d.marquee = migrateMarquee(d.marquee, s.marquee);
@@ -55,6 +56,15 @@ export function migrateSiteData(raw: unknown, seed: SiteData): SiteData {
   d.footer = migrateFooter(d.footer, s.footer);
 
   return d as SiteData;
+}
+
+function migrateBrand(raw: unknown, seed: SiteData["brand"]) {
+  const b = (raw ?? {}) as Record<string, unknown>;
+  return {
+    name: typeof b.name === "string" ? b.name : seed.name,
+    logoUrl: (b.logoUrl ?? seed.logoUrl ?? null) as string | null,
+    teamNumber: normalizeTeamNumber(b.teamNumber ?? seed.teamNumber ?? null),
+  };
 }
 
 function migrateNav(raw: unknown, seed: SiteData["nav"]) {
@@ -205,12 +215,30 @@ function migrateContact(raw: unknown, seed: SiteData["contact"]) {
     headingPre: asLocalized(c.headingPre, pick(seed.headingPre, "tr")),
     headingUnderline: asLocalized(c.headingUnderline, pick(seed.headingUnderline, "tr")),
     email: typeof c.email === "string" ? c.email : seed.email,
-    details: details.map((d: Record<string, unknown>, i: number) => ({
-      id: String(d.id ?? seed.details[i]?.id ?? `d${i}`),
-      k: asLocalized(d.k, pick(seed.details[i]?.k, "tr")),
-      v: asLocalized(d.v, pick(seed.details[i]?.v, "tr")),
-    })),
+    details: details.map((d: Record<string, unknown>, i: number) => {
+      const k = asLocalized(d.k, pick(seed.details[i]?.k, "tr"));
+      const v = asLocalized(d.v, pick(seed.details[i]?.v, "tr"));
+      const seeded = normalizeWebsiteUrl(d.linkUrl ?? seed.details[i]?.linkUrl ?? null);
+      const linkUrl = seeded ?? inferContactLinkUrl(k, v);
+      return {
+        id: String(d.id ?? seed.details[i]?.id ?? `d${i}`),
+        k,
+        v,
+        linkUrl,
+      };
+    }),
   };
+}
+
+function inferContactLinkUrl(k: Localized, v: Localized): string | null {
+  const label = `${k.en} ${k.tr}`.toLowerCase();
+  const handle = (v.en || v.tr || "").trim();
+  if (!handle) return null;
+  if (label.includes("instagram")) {
+    const user = handle.replace(/^@/, "");
+    if (/^[a-zA-Z0-9._]+$/.test(user)) return `https://instagram.com/${user}`;
+  }
+  return null;
 }
 
 function migrateFooter(raw: unknown, seed: SiteData["footer"]) {
@@ -226,7 +254,17 @@ export function needsMigration(raw: unknown): boolean {
   if (typeof data.hero?.sub === "string") return true;
   const sponsors = data.sponsors?.items;
   if (Array.isArray(sponsors) && sponsors.some((s) => !("websiteUrl" in s))) return true;
+  if (data.brand && !("teamNumber" in data.brand)) return true;
+  const details = data.contact?.details;
+  if (Array.isArray(details) && details.some((d) => !("linkUrl" in d))) return true;
   return false;
+}
+
+/** FIRST team numbers are digits only; blank clears the field. */
+export function normalizeTeamNumber(raw: unknown): string | null {
+  if (typeof raw !== "string") return null;
+  const digits = raw.replace(/\D/g, "");
+  return digits || null;
 }
 
 /** Accept bare domains in admin; always store a usable absolute URL or null. */

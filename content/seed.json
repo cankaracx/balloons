@@ -1,5 +1,5 @@
 {
-  "brand": { "name": "BALLOONS", "logoUrl": null },
+  "brand": { "name": "BALLOONS", "logoUrl": null, "teamNumber": null },
   "nav": {
     "links": [
       { "id": "n1", "label": { "en": "About", "tr": "Hakkımızda" }, "href": "#about" },
@@ -222,9 +222,9 @@
     "headingUnderline": { "en": "together.", "tr": "inşa edelim." },
     "email": "balloons@tedantalya.k12.tr",
     "details": [
-      { "id": "d1", "k": { "en": "Location", "tr": "Konum" }, "v": { "en": "Antalya, Türkiye", "tr": "Antalya, Türkiye" } },
-      { "id": "d2", "k": { "en": "Instagram", "tr": "Instagram" }, "v": { "en": "@balloons.frc", "tr": "@balloons.frc" } },
-      { "id": "d3", "k": { "en": "School", "tr": "Okul" }, "v": { "en": "TED Antalya Koleji", "tr": "TED Antalya Koleji" } }
+      { "id": "d1", "k": { "en": "Location", "tr": "Konum" }, "v": { "en": "Antalya, Türkiye", "tr": "Antalya, Türkiye" }, "linkUrl": null },
+      { "id": "d2", "k": { "en": "Instagram", "tr": "Instagram" }, "v": { "en": "@balloons.frc", "tr": "@balloons.frc" }, "linkUrl": "https://instagram.com/balloons.frc" },
+      { "id": "d3", "k": { "en": "School", "tr": "Okul" }, "v": { "en": "TED Antalya Koleji", "tr": "TED Antalya Koleji" }, "linkUrl": null }
     ]
   },
   "footer": {

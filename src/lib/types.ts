@@ -4,7 +4,7 @@ export type Locale = "en" | "tr";
 
 export type Localized = { en: string; tr: string };
 
-export type Brand = { name: string; logoUrl: string | null };
+export type Brand = { name: string; logoUrl: string | null; teamNumber: string | null };
 
 export type NavLink = { id: string; label: Localized; href: string };
 
@@ -75,7 +75,7 @@ export type Outreach = {
   rows: OutreachRow[];
 };
 
-export type ContactDetail = { id: string; k: Localized; v: Localized };
+export type ContactDetail = { id: string; k: Localized; v: Localized; linkUrl: string | null };
 export type Contact = {
   idx: string;
   label: Localized;

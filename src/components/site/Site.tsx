@@ -9,7 +9,7 @@ import MobileNav from "./MobileNav";
 import Pufferfish from "./Pufferfish";
 import GalleryLightbox from "./GalleryLightbox";
 import { useScrollSpy } from "./useScrollSpy";
-import { loc, normalizeWebsiteUrl, pick } from "@/lib/i18n";
+import { loc, normalizeTeamNumber, normalizeWebsiteUrl, pick } from "@/lib/i18n";
 import { useLocale } from "./LocaleCtx";
 import type { Localized, SiteData } from "@/lib/types";
 
@@ -67,6 +67,8 @@ function Page() {
   }, [data, editMode]);
 
   const b = data;
+  const teamNo = b.brand.teamNumber;
+  const showTeamId = editMode || !!teamNo;
   const logo = (size: number) => (
     <EImage url={b.brand.logoUrl} onChange={(url) => mut((d) => (d.brand.logoUrl = url))} fallback={<Pufferfish />} />
   );
@@ -115,6 +117,24 @@ function Page() {
         <div className="wrap">
           <div className="hero-grid">
             <div>
+              {showTeamId && (
+                <div className="hero-team rv">
+                  {editMode ? (
+                    <label className="hero-team-edit">
+                      <span className="hero-team-k">FRC team #</span>
+                      <EPlain
+                        value={teamNo ?? ""}
+                        onChange={(v) => mut((d) => (d.brand.teamNumber = normalizeTeamNumber(v)))}
+                      />
+                      {!teamNo && (
+                        <span className="hero-team-hint">Hidden on the live site until you enter a number.</span>
+                      )}
+                    </label>
+                  ) : (
+                    <span className="hero-team-no">Team {teamNo}</span>
+                  )}
+                </div>
+              )}
               <EText className="mono rv" style={{ color: "var(--accent)" }} value={b.hero.eyebrow} onChange={(v) => mut((d) => (d.hero.eyebrow = v))} as="div" />
               <EPlain as="h1" className="rv" style={{ transitionDelay: ".05s" }} value={b.hero.title} onChange={(v) => mut((d) => (d.hero.title = v))} />
               <EText as="p" className="body sub rv" style={{ transitionDelay: ".12s" }} value={b.hero.sub} onChange={(v) => mut((d) => (d.hero.sub = v))} />
@@ -297,13 +317,9 @@ function Page() {
             </div>
             <div className="clist rv" style={{ transitionDelay: ".16s" }}>
               {b.contact.details.map((dl, i) => (
-                <div className="cr editable-item" key={dl.id}>
-                  <ItemControls onDelete={() => mut((d) => d.contact.details.splice(i, 1))} />
-                  <EText value={dl.k} onChange={(v) => mut((d) => (d.contact.details[i].k = v))} />
-                  <EText className="v" value={dl.v} onChange={(v) => mut((d) => (d.contact.details[i].v = v))} />
-                </div>
+                <ContactRow key={dl.id} detail={dl} index={i} />
               ))}
-              <AddButton label="Add detail" onClick={() => mut((d) => d.contact.details.push({ id: rid(), k: loc("Label", "Etiket"), v: loc("Value", "Değer") }))} />
+              <AddButton label="Add detail" onClick={() => mut((d) => d.contact.details.push({ id: rid(), k: loc("Label", "Etiket"), v: loc("Value", "Değer"), linkUrl: null }))} />
             </div>
           </div>
         </div>
@@ -340,6 +356,40 @@ function Page() {
         />
       )}
     </>
+  );
+}
+
+function ContactRow({ detail: dl, index: i }: { detail: SiteData["contact"]["details"][0]; index: number }) {
+  const { mut, editMode } = useEdit();
+  const { locale } = useLocale();
+  const label = pick(dl.k, locale);
+  const href = !editMode && dl.linkUrl ? dl.linkUrl : null;
+
+  const value = (
+    <EText className="v" value={dl.v} onChange={(v) => mut((d) => (d.contact.details[i].v = v))} />
+  );
+
+  return (
+    <div className="cr editable-item">
+      <ItemControls onDelete={() => mut((d) => d.contact.details.splice(i, 1))} />
+      <EText value={dl.k} onChange={(v) => mut((d) => (d.contact.details[i].k = v))} />
+      {href ? (
+        <a href={href} className="cr-v-link" target="_blank" rel="noopener noreferrer" aria-label={`${label} (opens in new tab)`}>
+          {value}
+        </a>
+      ) : (
+        value
+      )}
+      {editMode && (
+        <label className="slot-url cr-url">
+          <span className="slot-url-k">Link</span>
+          <EPlain
+            value={dl.linkUrl ?? ""}
+            onChange={(v) => mut((d) => (d.contact.details[i].linkUrl = normalizeWebsiteUrl(v)))}
+          />
+        </label>
+      )}
+    </div>
   );
 }
 

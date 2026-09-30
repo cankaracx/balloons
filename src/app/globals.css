@@ -80,6 +80,11 @@ header.scr{border-color:var(--hair)}
 .hero{min-height:100vh;display:flex;align-items:center;position:relative;padding:110px 0 40px;overflow-x:clip;overflow-y:visible}
 .hero-grid{position:relative;display:grid;grid-template-columns:1.05fr .95fr;align-items:center;gap:40px;width:100%}
 .hero h1{font-size:clamp(72px,15vw,184px);font-weight:800;letter-spacing:-.05em;line-height:.92;margin:14px 0;text-wrap:balance}
+.hero-team{margin-bottom:10px}
+.hero-team-no{font-family:var(--mono);font-size:13px;letter-spacing:.06em;font-weight:700;color:var(--ink);display:inline-block;padding:6px 10px;border:1.5px solid var(--hair);border-radius:2px;background:var(--paper)}
+.hero-team-edit{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 12px;font-size:13px;color:var(--ink-soft)}
+.hero-team-k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.hero-team-hint{font-size:12px;color:var(--ink-soft);flex:1 1 100%}
 .hero .sub{max-width:34ch;margin-top:8px}
 .hero .cta{margin-top:34px;display:flex;flex-wrap:wrap;gap:12px}
 .fish-wrap{position:relative;display:flex;justify-content:center}
@@ -192,7 +197,11 @@ header.scr{border-color:var(--hair)}
 .clist .cr{display:flex;justify-content:space-between;gap:20px;padding:16px 0;border-bottom:1px solid var(--hair);text-transform:uppercase;letter-spacing:.04em}
 .clist .cr:first-child{border-top:1px solid var(--hair)}
 .clist .cr .v{color:var(--ink);font-weight:600;text-transform:none;letter-spacing:0}
+.cr-v-link{display:block;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(238,74,27,.45);transition:color .2s,text-decoration-color .2s}
+.cr-v-link:hover{color:var(--accent);text-decoration-color:var(--accent)}
+.cr-url{margin-top:8px;width:100%}
 .dark .clist .cr{border-color:var(--hair-d)} .dark .clist .cr .v{color:var(--bone)}
+.dark .cr-v-link:hover{color:var(--accent-2)}
 .big-mail{display:inline-block;font-size:clamp(26px,4vw,46px);font-weight:800;letter-spacing:-.03em;margin-top:18px}
 .big-mail:hover{color:var(--accent)}
 @media(max-width:820px){.contact-grid{grid-template-columns:1fr;gap:30px}}
