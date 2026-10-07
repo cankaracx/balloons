@@ -82,6 +82,8 @@ header.scr{border-color:var(--hair)}
 .hero h1{font-size:clamp(72px,15vw,184px);font-weight:800;letter-spacing:-.05em;line-height:.92;margin:14px 0;text-wrap:balance}
 .hero-team{margin-bottom:10px}
 .hero-team-no{font-family:var(--mono);font-size:13px;letter-spacing:.06em;font-weight:700;color:var(--ink);display:inline-block;padding:6px 10px;border:1.5px solid var(--hair);border-radius:2px;background:var(--paper)}
+a.hero-team-link{text-decoration:none;transition:border-color .2s,color .2s}
+a.hero-team-link:hover{border-color:var(--accent);color:var(--accent)}
 .hero-team-edit{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 12px;font-size:13px;color:var(--ink-soft)}
 .hero-team-k{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
 .hero-team-hint{font-size:12px;color:var(--ink-soft);flex:1 1 100%}
