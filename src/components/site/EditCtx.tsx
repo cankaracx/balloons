@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useRef, useState, type ReactNode } from "react";
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import type { SiteData } from "@/lib/types";
 import { saveSite } from "@/actions/site";
 
@@ -36,10 +36,12 @@ export function EditProvider({
   const [data, setData] = useState<SiteData>(initial);
   const [editMode, setEditMode] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
+  const [isDirty, setIsDirty] = useState(false);
   const dirty = useRef(false);
 
   const mut = (fn: (d: SiteData) => void) => {
     dirty.current = true;
+    setIsDirty(true);
     setStatus("idle");
     setData((prev) => {
       const d = structuredClone(prev);
@@ -53,6 +55,7 @@ export function EditProvider({
     try {
       await saveSite(data);
       dirty.current = false;
+      setIsDirty(false);
       setStatus("saved");
       setTimeout(() => setStatus((s) => (s === "saved" ? "idle" : s)), 2000);
     } catch (e) {
@@ -60,6 +63,17 @@ export function EditProvider({
       setStatus("error");
     }
   };
+
+  useEffect(() => {
+    if (!editMode || !isDirty) return;
+    const onBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (!dirty.current) return;
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    window.addEventListener("beforeunload", onBeforeUnload);
+    return () => window.removeEventListener("beforeunload", onBeforeUnload);
+  }, [editMode, isDirty]);
 
   const upload = async (file: File, cb: (url: string) => void) => {
     const fd = new FormData();

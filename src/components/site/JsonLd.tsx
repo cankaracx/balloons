@@ -1,4 +1,5 @@
 import type { SiteData } from "@/lib/types";
+import { teamBlueAllianceUrl } from "@/lib/team-links";
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://balloons-zeta.vercel.app";
 
@@ -28,6 +29,8 @@ export default function JsonLd({ data }: { data: SiteData }) {
   if (teamNo) {
     schema.alternateName = `FRC Team ${teamNo}`;
     schema.identifier = teamNo;
+    const tba = teamBlueAllianceUrl(teamNo);
+    if (tba) schema.sameAs = [tba];
   }
 
   return (

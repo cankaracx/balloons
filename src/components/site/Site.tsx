@@ -10,6 +10,7 @@ import Pufferfish from "./Pufferfish";
 import GalleryLightbox from "./GalleryLightbox";
 import { useScrollSpy } from "./useScrollSpy";
 import { loc, normalizeTeamNumber, normalizeWebsiteUrl, pick } from "@/lib/i18n";
+import { teamBlueAllianceUrl } from "@/lib/team-links";
 import { useLocale } from "./LocaleCtx";
 import type { Localized, SiteData } from "@/lib/types";
 
@@ -69,6 +70,7 @@ function Page() {
   const b = data;
   const teamNo = b.brand.teamNumber;
   const showTeamId = editMode || !!teamNo;
+  const teamProfileUrl = teamBlueAllianceUrl(teamNo);
   const logo = (size: number) => (
     <EImage url={b.brand.logoUrl} onChange={(url) => mut((d) => (d.brand.logoUrl = url))} fallback={<Pufferfish />} />
   );
@@ -130,6 +132,16 @@ function Page() {
                         <span className="hero-team-hint">Hidden on the live site until you enter a number.</span>
                       )}
                     </label>
+                  ) : teamProfileUrl ? (
+                    <a
+                      href={teamProfileUrl}
+                      className="hero-team-no hero-team-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`FRC Team ${teamNo} on The Blue Alliance (opens in new tab)`}
+                    >
+                      Team {teamNo}
+                    </a>
                   ) : (
                     <span className="hero-team-no">Team {teamNo}</span>
                   )}
