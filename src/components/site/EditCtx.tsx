@@ -11,7 +11,13 @@ type Ctx = {
   editMode: boolean;
   canEdit: boolean;
   status: Status;
+  isDirty: boolean;
+  leavePrompt: boolean;
   setEditMode: (v: boolean) => void;
+  requestLeaveEditMode: () => void;
+  cancelLeavePrompt: () => void;
+  discardChangesAndLeave: () => void;
+  saveAndLeave: () => void;
   mut: (fn: (draft: SiteData) => void) => void;
   save: () => void;
   upload: (file: File, cb: (url: string) => void) => void;
@@ -33,11 +39,19 @@ export function EditProvider({
   canEdit: boolean;
   children: ReactNode;
 }) {
-  const [data, setData] = useState<SiteData>(initial);
-  const [editMode, setEditMode] = useState(false);
+  const [saved, setSaved] = useState<SiteData>(() => structuredClone(initial));
+  const [data, setData] = useState<SiteData>(() => structuredClone(initial));
+  const [editMode, setEditModeState] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [isDirty, setIsDirty] = useState(false);
+  const [leavePrompt, setLeavePrompt] = useState(false);
   const dirty = useRef(false);
+
+  useEffect(() => {
+    if (editMode || dirty.current) return;
+    setSaved(structuredClone(initial));
+    setData(structuredClone(initial));
+  }, [initial, editMode]);
 
   const mut = (fn: (d: SiteData) => void) => {
     dirty.current = true;
@@ -50,14 +64,66 @@ export function EditProvider({
     });
   };
 
+  const discardChanges = () => {
+    dirty.current = false;
+    setIsDirty(false);
+    setStatus("idle");
+    setData(structuredClone(saved));
+  };
+
   const save = async () => {
     setStatus("saving");
     try {
-      await saveSite(data);
+      const next = await saveSite(data);
+      const snapshot = structuredClone(next);
+      setSaved(snapshot);
+      setData(snapshot);
       dirty.current = false;
       setIsDirty(false);
       setStatus("saved");
       setTimeout(() => setStatus((s) => (s === "saved" ? "idle" : s)), 2000);
+    } catch (e) {
+      console.error(e);
+      setStatus("error");
+    }
+  };
+
+  const setEditMode = (v: boolean) => {
+    if (v) {
+      setEditModeState(true);
+      return;
+    }
+    if (!dirty.current) setEditModeState(false);
+  };
+
+  const requestLeaveEditMode = () => {
+    if (!dirty.current) {
+      setEditModeState(false);
+      return;
+    }
+    setLeavePrompt(true);
+  };
+
+  const cancelLeavePrompt = () => setLeavePrompt(false);
+
+  const discardChangesAndLeave = () => {
+    discardChanges();
+    setLeavePrompt(false);
+    setEditModeState(false);
+  };
+
+  const saveAndLeave = async () => {
+    setStatus("saving");
+    try {
+      const next = await saveSite(data);
+      const snapshot = structuredClone(next);
+      setSaved(snapshot);
+      setData(snapshot);
+      dirty.current = false;
+      setIsDirty(false);
+      setStatus("idle");
+      setLeavePrompt(false);
+      setEditModeState(false);
     } catch (e) {
       console.error(e);
       setStatus("error");
@@ -89,7 +155,24 @@ export function EditProvider({
   };
 
   return (
-    <EditContext.Provider value={{ data, editMode, canEdit, status, setEditMode, mut, save, upload }}>
+    <EditContext.Provider
+      value={{
+        data,
+        editMode,
+        canEdit,
+        status,
+        isDirty,
+        leavePrompt,
+        setEditMode,
+        requestLeaveEditMode,
+        cancelLeavePrompt,
+        discardChangesAndLeave,
+        saveAndLeave,
+        mut,
+        save,
+        upload,
+      }}
+    >
       <div className={editMode ? "edit" : undefined}>{children}</div>
     </EditContext.Provider>
   );

@@ -263,6 +263,16 @@ footer{background:var(--ink);color:var(--bone);padding:60px 0 36px}
 .editbar .save{background:var(--accent);color:#fff} .editbar .save:disabled{opacity:.5;cursor:default}
 .editbar .ghost{background:rgba(255,255,255,.12);color:var(--bone)}
 .editbar .status{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.06em;opacity:.7}
+.edit-leave{position:fixed;inset:0;z-index:210;display:flex;align-items:flex-end;justify-content:center;padding:20px}
+.edit-leave-back{position:absolute;inset:0;border:0;background:rgba(21,22,26,.52);cursor:pointer}
+.edit-leave-card{position:relative;z-index:1;width:min(420px,100%);background:var(--paper);color:var(--ink);padding:22px 24px 20px;border-radius:4px;
+  border:1px solid var(--hair);box-shadow:0 20px 50px -18px rgba(0,0,0,.45)}
+.edit-leave-title{font-size:17px;font-weight:800;letter-spacing:-.02em;line-height:1.25}
+.edit-leave-body{margin-top:8px;font-size:14px;color:var(--ink-soft);line-height:1.5}
+.edit-leave-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.edit-leave-actions .save,.edit-leave-actions .ghost{border-radius:3px;padding:10px 14px;font-size:13px}
+.edit-leave-actions .save{background:var(--accent);color:#fff;border:0}
+.edit-leave-actions .ghost{background:var(--bone);color:var(--ink);border:1.5px solid var(--hair)}
 
 /* ---------- mobile ---------- */
 @media(max-width:760px){
