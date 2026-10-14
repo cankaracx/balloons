@@ -10,7 +10,7 @@ import Pufferfish from "./Pufferfish";
 import GalleryLightbox from "./GalleryLightbox";
 import { useScrollSpy } from "./useScrollSpy";
 import { loc, normalizeTeamNumber, normalizeWebsiteUrl, pick } from "@/lib/i18n";
-import { teamBlueAllianceUrl } from "@/lib/team-links";
+import { contactMailtoHref, teamBlueAllianceUrl } from "@/lib/team-links";
 import { useLocale } from "./LocaleCtx";
 import type { Localized, SiteData } from "@/lib/types";
 
@@ -28,6 +28,7 @@ const SECTION_IDS = ["top", "about", "support", "sponsors", "team", "work", "out
 
 function Page() {
   const { data, mut, editMode, canEdit } = useEdit();
+  const { locale } = useLocale();
   const [menuOpen, setMenuOpen] = useState(false);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const activeSection = useScrollSpy(SECTION_IDS);
@@ -210,7 +211,12 @@ function Page() {
           </div>
           <AddButton label="Add benefit" onClick={() => mut((d) => d.support.cells.push({ id: rid(), key: "E", title: loc("New benefit", "Yeni avantaj"), body: loc("Describe it.", "Açıklayın.") }))} />
           <div className="rv" style={{ marginTop: 46 }}>
-            <a href="#contact" className="btn fill"><EText value={b.support.cta} onChange={(v) => mut((d) => (d.support.cta = v))} /> <span className="ar">→</span></a>
+            <a
+              href={editMode ? "#contact" : contactMailtoHref(b.contact.email, locale, "sponsor")}
+              className="btn fill"
+            >
+              <EText value={b.support.cta} onChange={(v) => mut((d) => (d.support.cta = v))} /> <span className="ar">→</span>
+            </a>
           </div>
         </div>
       </section>
@@ -323,9 +329,19 @@ function Page() {
           <div className="contact-grid" style={{ marginTop: 48 }}>
             <div>
               <Heading pre={b.contact.headingPre} ul={b.contact.headingUnderline} onPre={(v) => mut((d) => (d.contact.headingPre = v))} onUl={(v) => mut((d) => (d.contact.headingUnderline = v))} />
-              <a href={`mailto:${b.contact.email}`} className="big-mail rv" style={{ transitionDelay: ".1s" }}>
-                <EPlain value={b.contact.email} onChange={(v) => mut((d) => (d.contact.email = v))} />
-              </a>
+              {editMode ? (
+                <div className="big-mail rv" style={{ transitionDelay: ".1s" }}>
+                  <EPlain value={b.contact.email} onChange={(v) => mut((d) => (d.contact.email = v))} />
+                </div>
+              ) : (
+                <a
+                  href={contactMailtoHref(b.contact.email, locale, "sponsor")}
+                  className="big-mail rv"
+                  style={{ transitionDelay: ".1s" }}
+                >
+                  <EPlain value={b.contact.email} onChange={(v) => mut((d) => (d.contact.email = v))} />
+                </a>
+              )}
             </div>
             <div className="clist rv" style={{ transitionDelay: ".16s" }}>
               {b.contact.details.map((dl, i) => (
@@ -503,7 +519,17 @@ function Marquee() {
 }
 
 function EditBar() {
-  const { editMode, setEditMode, save, status } = useEdit();
+  const {
+    editMode,
+    setEditMode,
+    save,
+    status,
+    leavePrompt,
+    requestLeaveEditMode,
+    cancelLeavePrompt,
+    discardChangesAndLeave,
+    saveAndLeave,
+  } = useEdit();
 
   async function logout() {
     await fetch("/api/auth/logout", { method: "POST" });
@@ -511,19 +537,53 @@ function EditBar() {
   }
 
   return (
-    <div className="editbar">
-      {!editMode ? (
-        <>
-          <button className="save" onClick={() => setEditMode(true)}>Edit page</button>
-          <button className="ghost" onClick={logout}>Sign out</button>
-        </>
-      ) : (
-        <>
-          <span className="status">{status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Error" : "Editing"}</span>
-          <button className="save" onClick={save} disabled={status === "saving"}>Save</button>
-          <button className="ghost" onClick={() => setEditMode(false)}>Done</button>
-        </>
+    <>
+      {leavePrompt && (
+        <div className="edit-leave" role="dialog" aria-modal="true" aria-labelledby="edit-leave-title">
+          <div className="edit-leave-card">
+            <p id="edit-leave-title" className="edit-leave-title">
+              Save changes before you leave?
+            </p>
+            <p className="edit-leave-body">Unsaved edits are not on the live site yet.</p>
+            <div className="edit-leave-actions">
+              <button type="button" className="save" onClick={saveAndLeave} disabled={status === "saving"}>
+                {status === "saving" ? "Saving…" : "Save & done"}
+              </button>
+              <button type="button" className="ghost" onClick={discardChangesAndLeave}>
+                Discard
+              </button>
+              <button type="button" className="ghost" onClick={cancelLeavePrompt}>
+                Keep editing
+              </button>
+            </div>
+          </div>
+          <button type="button" className="edit-leave-back" aria-label="Keep editing" onClick={cancelLeavePrompt} />
+        </div>
       )}
-    </div>
+      <div className="editbar">
+        {!editMode ? (
+          <>
+            <button className="save" onClick={() => setEditMode(true)}>
+              Edit page
+            </button>
+            <button className="ghost" onClick={logout}>
+              Sign out
+            </button>
+          </>
+        ) : (
+          <>
+            <span className="status">
+              {status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Error" : "Editing"}
+            </span>
+            <button className="save" onClick={save} disabled={status === "saving"}>
+              Save
+            </button>
+            <button className="ghost" onClick={requestLeaveEditMode}>
+              Done
+            </button>
+          </>
+        )}
+      </div>
+    </>
   );
 }
