@@ -199,6 +199,29 @@ function Page() {
           <hr className="rule rv" />
           <Heading pre={b.support.headingPre} ul={b.support.headingUnderline} onPre={(v) => mut((d) => (d.support.headingPre = v))} onUl={(v) => mut((d) => (d.support.headingUnderline = v))} max="18ch" />
           <EText as="p" className="body rv" style={{ transitionDelay: ".1s", maxWidth: "58ch", marginTop: 22 }} value={b.support.body} onChange={(v) => mut((d) => (d.support.body = v))} />
+          <div className="tier-block rv" style={{ transitionDelay: ".14s" }}>
+            <EText as="h3" className="tier-block-h" value={b.support.tiersHeading} onChange={(v) => mut((d) => (d.support.tiersHeading = v))} />
+            <EText as="p" className="tier-block-sub" value={b.support.tiersSub} onChange={(v) => mut((d) => (d.support.tiersSub = v))} />
+            <div className="tier-ladder">
+              {b.support.tiers.map((tier, ti) => (
+                <SponsorTierCard key={tier.id} tier={tier} index={ti} email={b.contact.email} />
+              ))}
+            </div>
+            <AddButton
+              label="Add sponsorship tier"
+              onClick={() =>
+                mut((d) =>
+                  d.support.tiers.push({
+                    id: rid(),
+                    name: loc("New tier", "Yeni kademe"),
+                    amount: loc("Custom", "Özel"),
+                    featured: false,
+                    perks: [{ id: rid(), text: loc("Describe a perk.", "Bir avantaj yazın.") }],
+                  }),
+                )
+              }
+            />
+          </div>
           <div className="ben">
             {b.support.cells.map((c, i) => (
               <div className="cell rv editable-item" key={c.id} style={{ transitionDelay: `${i * 0.08}s` }}>
@@ -384,6 +407,71 @@ function Page() {
         />
       )}
     </>
+  );
+}
+
+function SponsorTierCard({
+  tier,
+  index: ti,
+  email,
+}: {
+  tier: SiteData["support"]["tiers"][0];
+  index: number;
+  email: string;
+}) {
+  const { mut, editMode } = useEdit();
+  const { locale } = useLocale();
+  const tierName = pick(tier.name, locale);
+  const mailHref = contactMailtoHref(email, locale, "sponsor", tierName);
+
+  return (
+    <article className={`tier editable-item${tier.featured ? " tier-featured" : ""} rv`} style={{ transitionDelay: `${ti * 0.06}s` }}>
+      <ItemControls
+        onUp={() => mut((d) => moveItem(d.support.tiers, ti, -1))}
+        onDown={() => mut((d) => moveItem(d.support.tiers, ti, 1))}
+        onDelete={() => mut((d) => d.support.tiers.splice(ti, 1))}
+      />
+      <div className="tier-top">
+        <EText as="div" className="tier-name" value={tier.name} onChange={(v) => mut((d) => (d.support.tiers[ti].name = v))} />
+        <EText className="tier-amt" value={tier.amount} onChange={(v) => mut((d) => (d.support.tiers[ti].amount = v))} />
+      </div>
+      <ul className="tier-perks">
+        {tier.perks.map((perk, pi) => (
+          <li key={perk.id} className="editable-item">
+            <ItemControls onDelete={() => mut((d) => d.support.tiers[ti].perks.splice(pi, 1))} />
+            <EText value={perk.text} onChange={(v) => mut((d) => (d.support.tiers[ti].perks[pi].text = v))} />
+          </li>
+        ))}
+      </ul>
+      <AddButton
+        label="Add perk"
+        onClick={() => mut((d) => d.support.tiers[ti].perks.push({ id: rid(), text: loc("New perk", "Yeni avantaj") }))}
+      />
+      {editMode ? (
+        <label className="tier-feature-toggle">
+          <input
+            type="checkbox"
+            checked={tier.featured}
+            onChange={(e) =>
+              mut((d) => {
+                if (e.target.checked) {
+                  d.support.tiers.forEach((t, i) => {
+                    t.featured = i === ti;
+                  });
+                } else {
+                  d.support.tiers[ti].featured = false;
+                }
+              })
+            }
+          />
+          <span>Highlight this tier on the live site</span>
+        </label>
+      ) : (
+        <a href={mailHref} className={`btn tier-cta${tier.featured ? " fill" : ""}`}>
+          {locale === "tr" ? `${tierName} hakkında yazın` : `Ask about ${tierName}`}
+        </a>
+      )}
+    </article>
   );
 }
 

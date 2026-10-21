@@ -28,12 +28,26 @@ export type About = {
 };
 
 export type SupportCell = { id: string; key: string; title: Localized; body: Localized };
+
+export type SponsorTierPerk = { id: string; text: Localized };
+export type SponsorTier = {
+  id: string;
+  name: Localized;
+  amount: Localized;
+  perks: SponsorTierPerk[];
+  /** Highlights one tier on the public page (typically the mid-season anchor package). */
+  featured: boolean;
+};
+
 export type Support = {
   idx: string;
   label: Localized;
   headingPre: Localized;
   headingUnderline: Localized;
   body: Localized;
+  tiersHeading: Localized;
+  tiersSub: Localized;
+  tiers: SponsorTier[];
   cells: SupportCell[];
   cta: Localized;
 };

@@ -66,6 +66,103 @@
       "en": "Backing a rookie team is the highest-visibility, lowest-cost partnership in our season. Your support buys parts, tools, and travel — and in return your name travels with us everywhere we go.",
       "tr": "Bir çaylak takımı desteklemek, sezonumuzdaki en görünür ve en uygun maliyetli ortaklıktır. Desteğiniz parça, takım ve seyahat satın alır — karşılığında adınız gittiğimiz her yerde bizimle birlikte olur."
     },
+    "tiersHeading": {
+      "en": "Pick a level that fits your organization.",
+      "tr": "Kurumunuza uygun bir seviye seçin."
+    },
+    "tiersSub": {
+      "en": "Every tier is negotiable for our rookie season — these are starting points for a conversation, not fixed invoices.",
+      "tr": "Çaylak sezonumuzda her kademe esnektir — bunlar fatura değil, konuşmaya başlamak için çıkış noktalarıdır."
+    },
+    "tiers": [
+      {
+        "id": "t1",
+        "name": { "en": "Founding partner", "tr": "Kurucu ortak" },
+        "amount": { "en": "Lead the season", "tr": "Sezona liderlik" },
+        "featured": true,
+        "perks": [
+          {
+            "id": "p1",
+            "text": {
+              "en": "Title placement on robot, pit banner, and team kit",
+              "tr": "Robot, pit bandı ve takım kıyafetlerinde başlık sponsorluğu"
+            }
+          },
+          {
+            "id": "p2",
+            "text": {
+              "en": "Featured story on our site and social channels all season",
+              "tr": "Tüm sezon web sitemizde ve sosyal medyada öne çıkan hikâye"
+            }
+          },
+          {
+            "id": "p3",
+            "text": {
+              "en": "Private workshop visit with a live robot demo for your team",
+              "tr": "Ekibiniz için canlı robot demosu içeren özel atölye ziyareti"
+            }
+          }
+        ]
+      },
+      {
+        "id": "t2",
+        "name": { "en": "Build partner", "tr": "İnşa ortağı" },
+        "amount": { "en": "Power the build", "tr": "İnşayı güçlendir" },
+        "featured": false,
+        "perks": [
+          {
+            "id": "p4",
+            "text": {
+              "en": "Logo on robot side panel and pit display",
+              "tr": "Robot yan paneli ve pit alanında logo"
+            }
+          },
+          {
+            "id": "p5",
+            "text": {
+              "en": "Named on our sponsors wall and season recap",
+              "tr": "Sponsor duvarımızda ve sezon özetinde isim"
+            }
+          },
+          {
+            "id": "p6",
+            "text": {
+              "en": "Invitation to a competition day when we travel",
+              "tr": "Yarışmaya gittiğimizde davetiye"
+            }
+          }
+        ]
+      },
+      {
+        "id": "t3",
+        "name": { "en": "Workshop friend", "tr": "Atölye dostu" },
+        "amount": { "en": "Fuel a mechanism", "tr": "Bir mekanizmaya destek" },
+        "featured": false,
+        "perks": [
+          {
+            "id": "p7",
+            "text": {
+              "en": "Logo on team apparel and website sponsor grid",
+              "tr": "Takım kıyafeti ve web sitesi sponsor ızgarasında logo"
+            }
+          },
+          {
+            "id": "p8",
+            "text": {
+              "en": "Thank-you post when your part ships on the robot",
+              "tr": "Parçanız robota takıldığında teşekkür paylaşımı"
+            }
+          },
+          {
+            "id": "p9",
+            "text": {
+              "en": "Open build day invitation for your colleagues",
+              "tr": "Mesai arkadaşlarınız için açık inşa günü daveti"
+            }
+          }
+        ]
+      }
+    ],
     "cells": [
       {
         "id": "c1",

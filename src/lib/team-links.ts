@@ -13,15 +13,21 @@ export function contactMailtoHref(
   email: string,
   locale: Locale,
   intent: "sponsor" | "general" = "sponsor",
+  tierName?: string,
 ): string {
   const trimmed = email.trim();
   if (!trimmed) return "mailto:";
 
+  const tier = tierName?.trim();
   const subject =
     intent === "sponsor"
       ? locale === "tr"
-        ? "Sponsorluk — BALLOONS FRC"
-        : "Sponsorship inquiry — BALLOONS FRC"
+        ? tier
+          ? `Sponsorluk — ${tier} — BALLOONS FRC`
+          : "Sponsorluk — BALLOONS FRC"
+        : tier
+          ? `Sponsorship — ${tier} — BALLOONS FRC`
+          : "Sponsorship inquiry — BALLOONS FRC"
       : locale === "tr"
         ? "Merhaba — BALLOONS FRC"
         : "Hello — BALLOONS FRC";
