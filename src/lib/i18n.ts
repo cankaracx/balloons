@@ -116,15 +116,34 @@ function migrateAbout(raw: unknown, seed: SiteData["about"]) {
   };
 }
 
+function migrateTier(raw: unknown, seed: SiteData["support"]["tiers"][0], i: number) {
+  const t = (raw ?? {}) as Record<string, unknown>;
+  const perks = Array.isArray(t.perks) ? t.perks : seed?.perks ?? [];
+  return {
+    id: String(t.id ?? seed?.id ?? `t${i}`),
+    name: asLocalized(t.name, pick(seed?.name, "tr")),
+    amount: asLocalized(t.amount, pick(seed?.amount, "tr")),
+    featured: typeof t.featured === "boolean" ? t.featured : !!seed?.featured,
+    perks: perks.map((p: Record<string, unknown>, j: number) => ({
+      id: String(p.id ?? seed?.perks[j]?.id ?? `p${i}${j}`),
+      text: asLocalized(p.text, pick(seed?.perks[j]?.text, "tr")),
+    })),
+  };
+}
+
 function migrateSupport(raw: unknown, seed: SiteData["support"]) {
   const sp = (raw ?? {}) as Record<string, unknown>;
   const cells = Array.isArray(sp.cells) ? sp.cells : seed.cells;
+  const tiersRaw = Array.isArray(sp.tiers) ? sp.tiers : seed.tiers;
   return {
     idx: String(sp.idx ?? seed.idx),
     label: asLocalized(sp.label, pick(seed.label, "tr")),
     headingPre: asLocalized(sp.headingPre, pick(seed.headingPre, "tr")),
     headingUnderline: asLocalized(sp.headingUnderline, pick(seed.headingUnderline, "tr")),
     body: asLocalized(sp.body, pick(seed.body, "tr")),
+    tiersHeading: asLocalized(sp.tiersHeading, pick(seed.tiersHeading, "tr")),
+    tiersSub: asLocalized(sp.tiersSub, pick(seed.tiersSub, "tr")),
+    tiers: tiersRaw.map((t: unknown, i: number) => migrateTier(t, seed.tiers[i], i)),
     cta: asLocalized(sp.cta, pick(seed.cta, "tr")),
     cells: cells.map((c: Record<string, unknown>, i: number) => ({
       id: String(c.id ?? seed.cells[i]?.id ?? `c${i}`),
@@ -257,6 +276,8 @@ export function needsMigration(raw: unknown): boolean {
   if (data.brand && !("teamNumber" in data.brand)) return true;
   const details = data.contact?.details;
   if (Array.isArray(details) && details.some((d) => !("linkUrl" in d))) return true;
+  const support = data.support as Record<string, unknown> | undefined;
+  if (support && !Array.isArray(support.tiers)) return true;
   return false;
 }
 
