@@ -12,11 +12,19 @@ import { useScrollSpy } from "./useScrollSpy";
 import { loc, normalizeTeamNumber, normalizeWebsiteUrl, pick } from "@/lib/i18n";
 import { contactMailtoHref, teamBlueAllianceUrl } from "@/lib/team-links";
 import { useLocale } from "./LocaleCtx";
-import type { Localized, SiteData } from "@/lib/types";
+import type { Locale, Localized, SiteData } from "@/lib/types";
 
-export default function Site({ data, canEdit }: { data: SiteData; canEdit: boolean }) {
+export default function Site({
+  data,
+  canEdit,
+  initialLocale = "en",
+}: {
+  data: SiteData;
+  canEdit: boolean;
+  initialLocale?: Locale;
+}) {
   return (
-    <LocaleProvider>
+    <LocaleProvider initialLocale={initialLocale}>
       <EditProvider initial={data} canEdit={canEdit}>
         <Page />
       </EditProvider>

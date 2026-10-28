@@ -17,12 +17,19 @@ export function useLocale() {
   return ctx;
 }
 
-export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("en");
+export function LocaleProvider({
+  children,
+  initialLocale = "en",
+}: {
+  children: ReactNode;
+  initialLocale?: Locale;
+}) {
+  const [locale, setLocaleState] = useState<Locale>(initialLocale);
 
   useEffect(() => {
-    setLocaleState(readStoredLocale());
-  }, []);
+    const stored = readStoredLocale();
+    if (stored !== initialLocale) setLocaleState(stored);
+  }, [initialLocale]);
 
   const setLocale = (next: Locale) => {
     setLocaleState(next);
