@@ -1,4 +1,5 @@
 import type { Locale, Localized, SiteData } from "./types";
+import { LOCALE_STORAGE_KEY, localeCookieValue, parseLocale } from "./locale-cookie";
 
 export type { Locale };
 
@@ -24,17 +25,15 @@ export function asLocalized(v: unknown, fallbackTr = ""): Localized {
   return { en: "", tr: "" };
 }
 
-const LOCALE_KEY = "balloons-locale";
-
 export function readStoredLocale(): Locale {
   if (typeof window === "undefined") return "en";
-  const stored = window.localStorage.getItem(LOCALE_KEY);
-  return stored === "tr" ? "tr" : "en";
+  return parseLocale(window.localStorage.getItem(LOCALE_STORAGE_KEY)) ?? "en";
 }
 
 export function storeLocale(locale: Locale) {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(LOCALE_KEY, locale);
+  window.localStorage.setItem(LOCALE_STORAGE_KEY, locale);
+  document.cookie = localeCookieValue(locale);
 }
 
 /** Upgrade pre-bilingual JSON rows to the Localized shape using seed Turkish copy. */
