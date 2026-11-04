@@ -162,6 +162,7 @@ function migrateSponsors(raw: unknown, seed: SiteData["sponsors"]) {
     headingPre: asLocalized(sp.headingPre, pick(seed.headingPre, "tr")),
     headingUnderline: asLocalized(sp.headingUnderline, pick(seed.headingUnderline, "tr")),
     body: asLocalized(sp.body, pick(seed.body, "tr")),
+    cta: asLocalized(sp.cta, pick(seed.cta, "tr")),
     items: items.map((it: Record<string, unknown>, i: number) => ({
       id: String(it.id ?? seed.items[i]?.id ?? `sp${i}`),
       name: asLocalized(it.name, pick(seed.items[i]?.name, "tr")),
@@ -277,6 +278,7 @@ export function needsMigration(raw: unknown): boolean {
   if (Array.isArray(details) && details.some((d) => !("linkUrl" in d))) return true;
   const support = data.support as Record<string, unknown> | undefined;
   if (support && !Array.isArray(support.tiers)) return true;
+  if (data.sponsors && !("cta" in data.sponsors)) return true;
   return false;
 }
 

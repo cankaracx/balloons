@@ -59,6 +59,8 @@ export type Sponsors = {
   headingPre: Localized;
   headingUnderline: Localized;
   body: Localized;
+  /** Shown below the logo wall — especially while slots are still open. */
+  cta: Localized;
   items: Sponsor[];
 };
 

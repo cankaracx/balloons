@@ -8,6 +8,7 @@ import LangSwitch from "./LangSwitch";
 import MobileNav from "./MobileNav";
 import Pufferfish from "./Pufferfish";
 import GalleryLightbox from "./GalleryLightbox";
+import CopyEmailButton from "./CopyEmailButton";
 import { useScrollSpy } from "./useScrollSpy";
 import { loc, normalizeTeamNumber, normalizeWebsiteUrl, pick } from "@/lib/i18n";
 import { contactMailtoHref, teamBlueAllianceUrl } from "@/lib/team-links";
@@ -264,6 +265,14 @@ function Page() {
               <SponsorSlot key={s.id} sponsor={s} index={i} />
             ))}
           </div>
+          <div className="sponsor-cta rv" style={{ transitionDelay: ".12s" }}>
+            <a
+              href={editMode ? "#contact" : contactMailtoHref(b.contact.email, locale, "sponsor")}
+              className="btn fill"
+            >
+              <EText value={b.sponsors.cta} onChange={(v) => mut((d) => (d.sponsors.cta = v))} />
+            </a>
+          </div>
           <AddButton label="Add sponsor slot" onClick={() => mut((d) => d.sponsors.items.push({ id: rid(), name: loc("Your logo here", "Logonuz burada"), logoUrl: null, websiteUrl: null }))} />
         </div>
       </section>
@@ -365,13 +374,12 @@ function Page() {
                   <EPlain value={b.contact.email} onChange={(v) => mut((d) => (d.contact.email = v))} />
                 </div>
               ) : (
-                <a
-                  href={contactMailtoHref(b.contact.email, locale, "sponsor")}
-                  className="big-mail rv"
-                  style={{ transitionDelay: ".1s" }}
-                >
-                  <EPlain value={b.contact.email} onChange={(v) => mut((d) => (d.contact.email = v))} />
-                </a>
+                <div className="contact-mail rv" style={{ transitionDelay: ".1s" }}>
+                  <a href={contactMailtoHref(b.contact.email, locale, "general")} className="big-mail">
+                    <EPlain value={b.contact.email} onChange={(v) => mut((d) => (d.contact.email = v))} />
+                  </a>
+                  <CopyEmailButton email={b.contact.email} />
+                </div>
               )}
             </div>
             <div className="clist rv" style={{ transitionDelay: ".16s" }}>

@@ -212,6 +212,10 @@
       "en": "We haven't signed a sponsor yet. That means the first names on board don't just join the season — they define it. Claim a space before anyone else does.",
       "tr": "Henüz bir sponsor anlaşmamız yok. Bu, ilk isimlerin sadece sezona katılmadığı — sezonu tanımladığı anlamına gelir. Başkasından önce bir yer kapın."
     },
+    "cta": {
+      "en": "Claim a founding spot",
+      "tr": "Kurucu sponsor yerini kapın"
+    },
     "items": [
       { "id": "sp1", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null, "websiteUrl": null },
       { "id": "sp2", "name": { "en": "Your logo here", "tr": "Logonuz burada" }, "logoUrl": null, "websiteUrl": null },
