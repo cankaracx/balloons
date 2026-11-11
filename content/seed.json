@@ -273,6 +273,14 @@
     "label": { "en": "Workshop", "tr": "Atölye" },
     "headingPre": { "en": "From sketch to ", "tr": "Eskizden " },
     "headingUnderline": { "en": "mechanism.", "tr": "mekanizmaya." },
+    "emptyTitle": {
+      "en": "Build-season photos are on the way.",
+      "tr": "İnşa sezonu fotoğrafları yolda."
+    },
+    "emptyBody": {
+      "en": "We're documenting every stage in the workshop — design reviews, machining, wiring, and drive tests. The gallery fills in as the robot takes shape.",
+      "tr": "Atölyedeki her aşamayı kaydediyoruz — tasarım incelemeleri, üretim, kablolama ve sürüş testleri. Robot şekillendikçe galeri dolacak."
+    },
     "frames": [
       { "id": "f1", "caption": { "en": "Build season", "tr": "İnşa sezonu" }, "photoUrl": null, "span": "a" },
       { "id": "f2", "caption": { "en": "Workshop", "tr": "Atölye" }, "photoUrl": null, "span": "b" },

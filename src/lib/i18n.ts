@@ -199,6 +199,8 @@ function migrateWork(raw: unknown, seed: SiteData["work"]) {
     label: asLocalized(w.label, pick(seed.label, "tr")),
     headingPre: asLocalized(w.headingPre, pick(seed.headingPre, "tr")),
     headingUnderline: asLocalized(w.headingUnderline, pick(seed.headingUnderline, "tr")),
+    emptyTitle: asLocalized(w.emptyTitle, pick(seed.emptyTitle, "tr")),
+    emptyBody: asLocalized(w.emptyBody, pick(seed.emptyBody, "tr")),
     frames: frames.map((f: Record<string, unknown>, i: number) => ({
       id: String(f.id ?? seed.frames[i]?.id ?? `f${i}`),
       caption: asLocalized(f.caption, pick(seed.frames[i]?.caption, "tr")),
@@ -279,6 +281,7 @@ export function needsMigration(raw: unknown): boolean {
   const support = data.support as Record<string, unknown> | undefined;
   if (support && !Array.isArray(support.tiers)) return true;
   if (data.sponsors && !("cta" in data.sponsors)) return true;
+  if (data.work && !("emptyTitle" in data.work)) return true;
   return false;
 }
 
