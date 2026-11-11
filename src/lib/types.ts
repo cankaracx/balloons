@@ -79,6 +79,9 @@ export type Work = {
   label: Localized;
   headingPre: Localized;
   headingUnderline: Localized;
+  /** Shown on the live site while no workshop photos are uploaded yet. */
+  emptyTitle: Localized;
+  emptyBody: Localized;
   frames: Frame[];
 };
 

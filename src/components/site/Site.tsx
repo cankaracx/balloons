@@ -306,36 +306,51 @@ function Page() {
           <SecHead idx={b.work.idx} label={b.work.label} onIdx={(v) => mut((d) => (d.work.idx = v))} onLabel={(v) => mut((d) => (d.work.label = v))} />
           <hr className="rule rv" />
           <Heading pre={b.work.headingPre} ul={b.work.headingUnderline} onPre={(v) => mut((d) => (d.work.headingPre = v))} onUl={(v) => mut((d) => (d.work.headingUnderline = v))} />
-          <div className="frames">
-            {b.work.frames.map((f, i) => {
-              const galleryIdx = f.photoUrl ? galleryFrames.findIndex((g) => g.id === f.id) : -1;
-              return (
-                <div
-                  className={`frame rv editable-item ${f.span}${!editMode && f.photoUrl ? " frame-open" : ""}`}
-                  key={f.id}
-                  style={{ transitionDelay: `${(i % 4) * 0.08}s` }}
-                  role={!editMode && f.photoUrl ? "button" : undefined}
-                  tabIndex={!editMode && f.photoUrl ? 0 : undefined}
-                  onClick={!editMode && f.photoUrl && galleryIdx >= 0 ? () => setLightboxIndex(galleryIdx) : undefined}
-                  onKeyDown={
-                    !editMode && f.photoUrl && galleryIdx >= 0
-                      ? (e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            e.preventDefault();
-                            setLightboxIndex(galleryIdx);
-                          }
-                        }
-                      : undefined
-                  }
-                >
-                  <ItemControls onUp={() => mut((d) => moveItem(d.work.frames, i, -1))} onDown={() => mut((d) => moveItem(d.work.frames, i, 1))} onDelete={() => mut((d) => d.work.frames.splice(i, 1))} />
-                  <EImage url={f.photoUrl} alt={f.caption} onChange={(url) => mut((d) => (d.work.frames[i].photoUrl = url))} />
-                  <span className="cap"><EText value={f.caption} onChange={(v) => mut((d) => (d.work.frames[i].caption = v))} /></span>
-                </div>
-              );
-            })}
-          </div>
-          <AddButton label="Add photo frame" onClick={() => mut((d) => d.work.frames.push({ id: rid(), caption: loc("New", "Yeni"), photoUrl: null, span: "" }))} />
+          {editMode && galleryFrames.length === 0 && (
+            <div className="work-empty-edit rv">
+              <EText as="h3" className="work-empty-h" value={b.work.emptyTitle} onChange={(v) => mut((d) => (d.work.emptyTitle = v))} />
+              <EText as="p" className="work-empty-p" value={b.work.emptyBody} onChange={(v) => mut((d) => (d.work.emptyBody = v))} />
+              <p className="work-empty-hint">Shown on the live site until at least one workshop photo is uploaded.</p>
+            </div>
+          )}
+          {!editMode && galleryFrames.length === 0 ? (
+            <WorkshopEmpty title={b.work.emptyTitle} body={b.work.emptyBody} shots={b.work.frames} />
+          ) : (
+            <div className="frames">
+                {b.work.frames.map((f, i) => {
+                  if (!editMode && !f.photoUrl) return null;
+                  const galleryIdx = f.photoUrl ? galleryFrames.findIndex((g) => g.id === f.id) : -1;
+                  const frameOrder = editMode ? i : galleryFrames.findIndex((g) => g.id === f.id);
+                  return (
+                    <div
+                      className={`frame rv editable-item ${f.span}${!editMode && f.photoUrl ? " frame-open" : ""}`}
+                      key={f.id}
+                      style={{ transitionDelay: `${(frameOrder >= 0 ? frameOrder % 4 : i % 4) * 0.08}s` }}
+                      role={!editMode && f.photoUrl ? "button" : undefined}
+                      tabIndex={!editMode && f.photoUrl ? 0 : undefined}
+                      onClick={!editMode && f.photoUrl && galleryIdx >= 0 ? () => setLightboxIndex(galleryIdx) : undefined}
+                      onKeyDown={
+                        !editMode && f.photoUrl && galleryIdx >= 0
+                          ? (e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                e.preventDefault();
+                                setLightboxIndex(galleryIdx);
+                              }
+                            }
+                          : undefined
+                      }
+                    >
+                      <ItemControls onUp={() => mut((d) => moveItem(d.work.frames, i, -1))} onDown={() => mut((d) => moveItem(d.work.frames, i, 1))} onDelete={() => mut((d) => d.work.frames.splice(i, 1))} />
+                      <EImage url={f.photoUrl} alt={f.caption} onChange={(url) => mut((d) => (d.work.frames[i].photoUrl = url))} />
+                      <span className="cap"><EText value={f.caption} onChange={(v) => mut((d) => (d.work.frames[i].caption = v))} /></span>
+                    </div>
+                  );
+                })}
+            </div>
+          )}
+          {editMode && (
+            <AddButton label="Add photo frame" onClick={() => mut((d) => d.work.frames.push({ id: rid(), caption: loc("New", "Yeni"), photoUrl: null, span: "" }))} />
+          )}
         </div>
       </section>
 
@@ -588,6 +603,38 @@ function Heading({ pre, ul, onPre, onUl, max }: { pre: Localized; ul: Localized;
   );
 }
 
+function WorkshopEmpty({
+  title,
+  body,
+  shots,
+}: {
+  title: Localized;
+  body: Localized;
+  shots: SiteData["work"]["frames"];
+}) {
+  const { locale } = useLocale();
+
+  return (
+    <div className="work-empty rv">
+      <div className="work-empty-in">
+        <p className="work-empty-k">{locale === "tr" ? "İnşa sezonu" : "Build season"}</p>
+        <h3 className="work-empty-h">{pick(title, locale)}</h3>
+        <p className="work-empty-p">{pick(body, locale)}</p>
+        {shots.length > 0 && (
+          <ul className="work-shotlist" aria-label={locale === "tr" ? "Planlanan çekimler" : "Planned shots"}>
+            {shots.map((f) => (
+              <li key={f.id}>
+                <span className="work-shot-dot" aria-hidden />
+                <span>{pick(f.caption, locale)}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+    </div>
+  );
+}
+
 function Marquee() {
   const { data, mut, editMode } = useEdit();
   const { locale } = useLocale();
@@ -677,10 +724,10 @@ function EditBar() {
         ) : (
           <>
             <span className="status">
-              {status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Error" : "Editing"}
+              {status === "saving" ? "Saving…" : status === "saved" ? "Saved ✓" : status === "error" ? "Save failed" : "Editing"}
             </span>
             <button className="save" onClick={save} disabled={status === "saving"}>
-              Save
+              {status === "error" ? "Retry save" : "Save"}
             </button>
             <button className="ghost" onClick={requestLeaveEditMode}>
               Done
